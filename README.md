@@ -61,6 +61,8 @@ deverá ser invocado nesses momentos.
 
 👕️ Feito
 
+- https://nestjs-standard-api.herokuapp.com/docs/
+
 8 – Cuidado com a autenticação. Um usuário não pode acessar os endpoints do outro tipo de
 usuário. Utilize autenticação Bearer token JWT.
 
