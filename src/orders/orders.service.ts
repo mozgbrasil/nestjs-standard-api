@@ -57,8 +57,8 @@ export class OrdersService {
 
 async function cieloDebitCard() {
   const cieloParams: CieloConstructor = {
-    merchantId: process.env.MerchantId,
-    merchantKey: process.env.MerchantKey,
+    merchantId: process.env.MERCHANTID,
+    merchantKey: process.env.MERCHANTKEY,
     requestId: 'xxxxxxx', // Opcional - Identificação do Servidor na Cielo
     sandbox: true, // Opcional - Ambiente de Testes
     debug: true, // Opcional - Exibe os dados enviados na requisição para a Cielo
