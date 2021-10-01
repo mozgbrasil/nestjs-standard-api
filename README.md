@@ -55,7 +55,7 @@ etc..) e um timestamp do evento. Faça um DTO com esses campos e um método para
 Esse modulo deverá ser injetado em todos os modulos que receberem ou enviarem requisições e
 deverá ser invocado nesses momentos.
 
-👕️ Feito
+👕️ Feito o envio para a fila no RabbitMQ de todas as requisições
 
 7 – Documente seus endpoints com Swagger e deixe a interface no endpoint /docs
 
