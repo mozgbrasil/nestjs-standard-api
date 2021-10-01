@@ -35,9 +35,9 @@ direcional entre APIs REST, uma vez que a cielo exige uma autenticação extra n
 envia uma requisição POST de volta para uma url que será fornecida como endpoint de notificações
 de pagamento da cielo.
 
-[✅️] Implementado a transação
+👕️ Implementado a transação
 
-[✅️] Implementado a Url de retorno e armazenando em fila
+👕️ Implementado a Url de retorno e armazenando em fila
 
 2 – Cada pagamento capturado (finalizado) deverá ter seu valor adicionado à carteira do vendedor.
 
@@ -55,18 +55,16 @@ etc..) e um timestamp do evento. Faça um DTO com esses campos e um método para
 Esse modulo deverá ser injetado em todos os modulos que receberem ou enviarem requisições e
 deverá ser invocado nesses momentos.
 
-✅️ Feito
+👕️ Feito
 
 7 – Documente seus endpoints com Swagger e deixe a interface no endpoint /docs
 
-✅️ Feito
+👕️ Feito
 
 8 – Cuidado com a autenticação. Um usuário não pode acessar os endpoints do outro tipo de
 usuário. Utilize autenticação Bearer token JWT.
 
 ℹ️ @TODO:
-
-✅️ ℹ️ 🛑️
 
 👾️⚙️
 
