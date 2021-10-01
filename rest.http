@@ -1,0 +1,27 @@
+@baseUrl = http://localhost:3004
+
+###
+
+GET {{baseUrl}}/ HTTP/1.1
+
+###
+
+# @name login
+POST {{baseUrl}}/login HTTP/1.1
+content-type: application/json
+
+{"username": "john", "password": "changeme"}
+
+###
+
+@authToken = {{login.response.headers.X-AuthToken}}
+
+# @name profile
+GET {{baseUrl}}/profile HTTP/1.1
+
+###
+
+POST {{baseUrl}}/orders/cielo_return HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+PaymentId=bb482756-cf40-4b0a-b926-489f59236e94
