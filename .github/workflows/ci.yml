@@ -90,7 +90,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Run ESLint and Prettier
-        run: yarn run lint
+        run: yarn run eslint
   test:
     name: Test
     runs-on: ubuntu-20.04
