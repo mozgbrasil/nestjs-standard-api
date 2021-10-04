@@ -18,16 +18,11 @@ $ yarn add amqplib amqp-connection-manager @nestjs/microservices amqplib joi @ne
 
 $ yarn add @types/joi @types/passport-local @types/passport-jwt -D
 
+$ nest g resource auth
 $ nest g resource cats
-
-$ nest g module auth
-$ nest g service auth
-
-$ nest g module casl
-$ nest g class casl/casl-ability.factory
-
 $ nest g resource customer
-$ nest g resource order
+$ nest g resource seller
+$ nest g resource payment
 
 ```
 

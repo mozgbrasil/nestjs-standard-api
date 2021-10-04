@@ -11,6 +11,7 @@ import {
   UseFilters,
   ForbiddenException,
   UseGuards,
+  Inject,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
@@ -27,6 +28,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 // import { Public } from '../auth/guards/jwt-auth.guard';
+// import { ClientProxy } from '@nestjs/microservices';
 
 // @TODO: Não vi efeito
 // @ApiBasicAuth()
@@ -38,7 +40,11 @@ import {
 @Controller('cats')
 @UseGuards(RolesGuard)
 export class CatsController {
-  constructor(private readonly catsService: CatsService) {}
+  constructor(
+    private readonly catsService: CatsService,
+  ) // @Inject('RABBIT_PUBLISH_CHANNEL')
+  // private readonly publishChannel: ClientProxy,
+  {}
 
   @Post()
   // @UseFilters(new HttpExceptionFilter())

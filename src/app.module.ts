@@ -16,8 +16,9 @@ import { UsersModule } from './users/users.module';
 import { RolesGuard } from './common/guards/roles.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { CatsModule } from './cats/cats.module';
-import { OrdersModule } from './orders/orders.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { SellerModule } from './seller/seller.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     AuthModule,
     ClientsModule.register([
       {
-        name: 'HELLO_SERVICE',
+        name: 'RABBIT_PUBLISH_CHANNEL',
         transport: Transport.RMQ,
         options: {
           urls: [process.env.AMQP_URL],
@@ -38,7 +39,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       },
     ]),
     UsersModule,
-    // OrdersModule,
+    SellerModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [

@@ -21,9 +21,8 @@ import { ClientProxy } from '@nestjs/microservices';
 @Controller()
 export class AppController {
   constructor(
-    // private readonly appService: AppService,
-    private authService: AuthService,
-    @Inject('HELLO_SERVICE') private readonly client: ClientProxy,
+    private readonly appService: AppService,
+    private authService: AuthService, // @Inject('RABBIT_PUBLISH_CHANNEL') private readonly client: ClientProxy,
   ) {}
 
   async onApplicationBootstrap() {
@@ -35,10 +34,10 @@ export class AppController {
     // var message = this.appService.getHello();
     var data = new Date();
     var message = 'Hello World! ' + `(${data})`;
-    this.client.emit<any>('message_printed', new Message(message));
-    // this.client.emit<any>('create-company', new Message(message));
+    // this.client.emit<any>('message_printed', new Message(message));
+    // this.client.emit<any>('req-rmq', new Message(message));
     // return message;
-    // return this.appService.getHello();
+    return this.appService.getHello();
   }
 
   // @Render('index')
