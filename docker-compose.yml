@@ -1,0 +1,109 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # [Choice] Node.js version: 14, 12, 10
+        VARIANT: 14
+        # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
+        USER_UID: 1000
+        USER_GID: 1000
+    volumes:
+      - ..:/workspace:cached
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    # network_mode: "service:mongodb"
+    # host = work / bridge = not work devcontainer /
+    network_mode: "host"
+    # Uncomment the next line to use a non-root user for all processes.
+    # user: node
+  mongodb:
+    image: mongo:latest
+    network_mode: "host"
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb-data:/data/db
+    # Uncomment to change startup options
+    # environment:
+    #  MONGO_INITDB_ROOT_USERNAME: root
+    #  MONGO_INITDB_ROOT_PASSWORD: example
+    #  MONGO_INITDB_DATABASE: your-database-here
+  mongo-express:
+    image: mongo-express
+    network_mode: "host"
+    restart: unless-stopped
+    # @TODO: Error, Not Work
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongodb
+  postgres:
+    image: "postgres:9.6"
+    network_mode: "host"
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-hello}
+    volumes:
+      - "volume-postgres:/var/lib/postgresql/data"
+  adminer:
+    image: adminer
+    network_mode: "host"
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+  pgadmin:
+    image: "dpage/pgadmin4"
+    network_mode: "host"
+    restart: unless-stopped
+    # @TODO: Error, Not Work
+    ports:
+      - "15432:15432"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    volumes:
+      - "volume-pgadmin:/var/lib/pgadmin"
+  redis:
+    image: redis
+    network_mode: "host"
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+  redisinsight:
+    image: redislabs/redisinsight
+    restart: unless-stopped
+    links:
+      - redis:redis
+    ports:
+      - "8001:8001"
+    volumes:
+      - redis-data:/db
+  rabbitmq:
+    image: "rabbitmq:3.8-management-alpine"
+    # network_mode: "host"
+    # container_name: nodejs-rabbitmq-rabbitmq
+    # hostname: rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq/mnesia
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+volumes:
+  mongodb-data:
+  volume-postgres:
+  volume-pgadmin:
+  redis-data:
+  rabbitmq-data:

@@ -1,11 +1,16 @@
-FROM node:12.14.0-alpine3.11
+ARG VARIANT=12
+FROM node:${VARIANT}
 
-RUN apk add --no-cache bash git
+RUN mkdir -p /usr/app/src
+WORKDIR /usr/app
 
-RUN touch /home/node/.bashrc | echo "PS1='\w\$ '" >> /home/node/.bashrc
+COPY package.json tsconfig.json tsconfig.build.json /usr/app/
+RUN npm install
+COPY src/ /usr/app/src
+RUN npm run build
+RUN rm -R node_modules
+RUN npm install --prod
+RUN rm -R src
+RUN ln -s /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
 
-RUN npm i -g @nestjs/cli@7.4.1
-
-USER node
-
-WORKDIR /home/node/nest
+CMD ["npm","run","start:prod"]
