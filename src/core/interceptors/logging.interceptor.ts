@@ -24,7 +24,7 @@ export class LoggingInterceptor implements NestInterceptor {
     const res = ctx.getResponse();
 
     var timestamp = new Date().getTime();
-    var logHttp = {
+    var message = {
       url: req.originalUrl,
       body: req.body,
       method: req.method,
@@ -32,7 +32,7 @@ export class LoggingInterceptor implements NestInterceptor {
       timestamp: timestamp,
     };
 
-    this.client.emit<any>('req-rmq', new Message('message'));
+    this.client.emit<any>('create-rmq-channel', new Message(message));
 
     const now = Date.now();
     const ret = next.handle().pipe(

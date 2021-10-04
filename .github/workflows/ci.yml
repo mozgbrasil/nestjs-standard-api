@@ -163,3 +163,27 @@ jobs:
   #         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
   #         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
   #         NETLIFY_DEPLOY_TO_PROD: true
+
+  Build:
+    needs: [build-web]
+    runs-on: ubuntu-latest
+    # if: github.event_name == 'push'
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build image
+        run: docker build . --file Dockerfile --tag img
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/develop/})"
+        id: extract_branch
+      - name: Push image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/$DOCKER_IMAGE_NAME
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          VERSION=${{ steps.extract_branch.outputs.branch }}
+          docker tag img $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION

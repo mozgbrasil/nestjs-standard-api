@@ -35,7 +35,7 @@ export class AppController {
     var data = new Date();
     var message = 'Hello World! ' + `(${data})`;
     // this.client.emit<any>('message_printed', new Message(message));
-    // this.client.emit<any>('req-rmq', new Message(message));
+    // this.client.emit<any>('create-rmq-channel', new Message(message));
     // return message;
     return this.appService.getHello();
   }
