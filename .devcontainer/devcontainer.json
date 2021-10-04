@@ -1,0 +1,245 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.183.0/containers/javascript-node-mongo
+// Update the VARIANT arg in docker-compose.yml to pick a Node.js version: 10, 12, 14
+{
+  "name": "Node.js & Mongo DB",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+
+  // Set *default* container specific settings.json values on container create.
+  "settings": {
+    "go.toolsManagement.checkForUpdates": "local",
+    "go.useLanguageServer": true,
+    "go.gopath": "/go",
+    "go.goroot": "/usr/local/go",
+    "python.pythonPath": "/opt/python/latest/bin/python",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
+    "python.formatting.blackPath": "/usr/local/py-utils/bin/black",
+    "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
+    "python.linting.banditPath": "/usr/local/py-utils/bin/bandit",
+    "python.linting.flake8Path": "/usr/local/py-utils/bin/flake8",
+    "python.linting.mypyPath": "/usr/local/py-utils/bin/mypy",
+    "python.linting.pycodestylePath": "/usr/local/py-utils/bin/pycodestyle",
+    "python.linting.pydocstylePath": "/usr/local/py-utils/bin/pydocstyle",
+    "python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
+    "lldb.executable": "/usr/bin/lldb",
+    "files.watcherExclude": {
+      "**/target/**": true
+    },
+    //
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+      "source.fixAll.stylelint": true,
+      "source.fixAll.tslint": true,
+      "source.organizeImports": false
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": true,
+    "editor.wordWrap": "on",
+    //
+    "[shellscript]": {
+      "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true
+    },
+    "cSpell.language": "en,pt",
+    "git.autofetch": true,
+    "eslint.alwaysShowStatus": true,
+    // https://github.com/baky0905/remote-container-python/blob/master/.devcontainer/devcontainer.json
+    // ---------------- EDITOR SETTINGS
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.cursorStyle": "line",
+    "editor.cursorWidth": 5,
+    "editor.cursorBlinking": "solid",
+    "editor.fontWeight": "500",
+    // "editor.fontFamily": "Fira Code",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    // "editor.fontLigatures": true,
+    "editor.fontSize": 16,
+    "editor.lineHeight": 22,
+    "editor.letterSpacing": 0.5,
+    "editor.minimap.enabled": false,
+    "editor.parameterHints.enabled": true,
+    "editor.renderWhitespace": "selection",
+    "editor.renderControlCharacters": true,
+    "editor.snippetSuggestions": "bottom",
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.suggest.localityBonus": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "on",
+    "editor.wordBasedSuggestions": false,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": false
+    },
+    "editor.quickSuggestionsDelay": 2,
+    "editor.tokenColorCustomizations": {
+      "comments": "#aaa",
+      "types": "#f66",
+      "textMateRules": [
+        {
+          "scope": "variable.parameter",
+          "settings": {
+            "fontStyle": "bold",
+            "foreground": "#FF0000"
+          }
+        }
+      ],
+      "functions": {
+        "fontStyle": "italic"
+      }
+    },
+    // ---------------- WORKBENCH SETTINGS
+    "workbench.colorTheme": "SynthWave '84",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.sideBar.location": "right",
+    "workbench.settings.editor": "json",
+    "workbench.startupEditor": "none",
+    "workbench.colorCustomizations": {
+      "contrastActiveBorder": "#0ff"
+    },
+    // ---------------- EXPLORER SETTINGS
+    "explorer.openEditors.visible": 0,
+    "breadcrumbs.enabled": true,
+    "peacock.favoriteColors": [
+      {
+        "name": "Angular Red",
+        "value": "#b52e31"
+      },
+      {
+        "name": "Auth0 Orange",
+        "value": "#eb5424"
+      },
+      {
+        "name": "Azure Blue",
+        "value": "#007fff"
+      },
+      {
+        "name": "C# Purple",
+        "value": "#68217A"
+      },
+      {
+        "name": "Gatsby Purple",
+        "value": "#639"
+      },
+      {
+        "name": "Go Cyan",
+        "value": "#5dc9e2"
+      },
+      {
+        "name": "Java Blue-Gray",
+        "value": "#557c9b"
+      },
+      {
+        "name": "JavaScript Yellow",
+        "value": "#f9e64f"
+      },
+      {
+        "name": "Mandalorian Blue",
+        "value": "#1857a4"
+      },
+      {
+        "name": "Node Green",
+        "value": "#215732"
+      },
+      {
+        "name": "React Blue",
+        "value": "#00b3e6"
+      },
+      {
+        "name": "Something Different",
+        "value": "#832561"
+      },
+      {
+        "name": "Vue Green",
+        "value": "#42b883"
+      }
+    ]
+  },
+
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+    "cschleiden.vscode-github-actions",
+    "donjayamanne.githistory",
+    "eamodio.gitlens",
+    "GitLab.gitlab-workflow",
+    "mhutchie.git-graph",
+    "Atlassian.atlascode",
+    "alefragnani.project-manager",
+    "alexcvzz.vscode-sqlite",
+    "almenon.arepl",
+    "bat67.markdown-extension-pack",
+    "benspaulding.procfile",
+    "bungcip.better-toml",
+    "christian-kohler.path-intellisense",
+    "coenraads.bracket-pair-colorizer-2",
+    "Compulim.indent4to2",
+    "dbaeumer.vscode-eslint",
+    "ecmel.vscode-html-css",
+    "EditorConfig.EditorConfig",
+    "eg2.vscode-npm-script",
+    "equinusocio.vsc-community-material-theme",
+    "equinusocio.vsc-material-theme",
+    "esbenp.prettier-vscode",
+    "firefox-devtools.vscode-firefox-debug",
+    "formulahendry.code-runner",
+    "formulahendry.vscode-mysql",
+    "foxundermoon.shell-format",
+    "gamunu.vscode-yarn",
+    "humao.rest-client",
+    "github.vscode-pull-request-github",
+    "Gruntfuggly.todo-tree",
+    "humao.rest-client",
+    "johnpapa.vscode-peacock",
+    "kevinrose.vsc-python-indent",
+    "mgmcdermott.vscode-language-babel",
+    "mikestead.dotenv",
+    "mongodb.mongodb-vscode",
+    "mrmlnc.vscode-pugbeautify",
+    "ms-azuretools.vscode-azureappservice",
+    "ms-azuretools.vscode-cosmosdb",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-vscode.vscode-typescript-next",
+    "natqe.reload",
+    "njpwerner.autodocstring",
+    "oderwat.indent-rainbow",
+    "Orta.vscode-jest",
+    "perkovec.emoji",
+    "pkief.material-icon-theme",
+    "ritwickdey.liveserver",
+    "robbowen.synthwave-vscode",
+    "rogalmic.bash-debug",
+    "shan.code-settings-sync",
+    "streetsidesoftware.code-spell-checker-portuguese-brazilian",
+    "streetsidesoftware.code-spell-checker",
+    "tht13.html-preview-vscode",
+    "timonwong.shellcheck",
+    "visualstudioexptteam.vscodeintellicode",
+    "vscode-icons-team.vscode-icons",
+    "WakaTime.vscode-wakatime",
+    "wmaurer.change-case",
+    "yurydelendik.firefox-debug"
+  ],
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // 27017 = mongodb
+  // 5432 = postgres
+  // 5672 = rabbitmq
+  "forwardPorts": [27017, 5432, 5672],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "yarn install",
+
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "node"
+}

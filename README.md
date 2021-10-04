@@ -14,9 +14,20 @@
 $ nest --help
 $ nest new nestjs-standard-api
 
-$ yarn add @nestjs/config @nestjs/swagger swagger-ui-express class-validator class-transformer cielo
+$ yarn add joi @nestjs/jwt passport-jwt @nestjs/passport passport passport-local @nestjs/config @nestjs/swagger swagger-ui-express class-validator class-transformer cielo
 
-$ nest g resource orders
+$ yarn add @types/joi @types/passport-local @types/passport-jwt -D
+
+$ nest g resource cats
+
+$ nest g module auth
+$ nest g service auth
+
+$ nest g module casl
+$ nest g class casl/casl-ability.factory
+
+$ nest g resource customer
+$ nest g resource order
 
 ```
 

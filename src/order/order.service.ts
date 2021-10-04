@@ -10,7 +10,7 @@ import {
 } from 'cielo';
 
 @Injectable()
-export class OrdersService {
+export class OrderService {
   create(createOrderDto: CreateOrderDto) {
     // return 'This action adds a new order';
 
@@ -39,7 +39,7 @@ export class OrdersService {
   }
 
   findAll() {
-    return `This action returns all orders`;
+    return `This action returns all order`;
   }
 
   findOne(id: number) {
@@ -75,7 +75,7 @@ async function cieloDebitCard() {
       type: EnumCardType.DEBIT,
       amount: 15700,
       provider: 'Simulado',
-      // returnUrl: 'https://nestjs-standard.herokuapp.com/orders/cielo_return/',
+      // returnUrl: 'https://nestjs-standard.herokuapp.com/order/cielo_return/',
       returnUrl: 'http://api.webhookinbox.com/i/lcIICgnZ/in/',
       debitCard: {
         cardNumber: '4532117080573703',

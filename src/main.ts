@@ -26,7 +26,17 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     // .addBasicAuth()
-    // .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .setTitle('MJV API')
     .setDescription('The MJV API')
     .setVersion('1.0')
