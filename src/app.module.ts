@@ -1,22 +1,29 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER, APP_PIPE, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Transport, ClientsModule } from '@nestjs/microservices';
-import { CustomerModule } from './customer/customer.module';
-import { OrderModule } from './order/order.module';
-import { CatsModule } from './cats/cats.module';
 import { AuthModule } from './auth/auth.module';
-import { CaslModule } from './casl/casl.module';
-import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
+import { HttpExceptionFilter } from './exceptions/http-exception.filter';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import { AuthService } from './auth/auth.service';
+import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
+import {
+  Module,
+  NestModule,
+  MiddlewareConsumer,
+  ValidationPipe,
+} from '@nestjs/common';
+import { UsersModule } from './users/users.module';
+import { RolesGuard } from './common/guards/roles.guard';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { CatsModule } from './cats/cats.module';
+import { OrdersModule } from './orders/orders.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    AuthService,
+    ConfigModule.forRoot(),
+    CatsModule,
+    AuthModule,
     ClientsModule.register([
       {
         name: 'HELLO_SERVICE',
@@ -30,19 +37,33 @@ import { AuthService } from './auth/auth.service';
         },
       },
     ]),
-    // CustomerModule,
-    OrderModule,
-    CatsModule,
-    // AuthModule,
-    CaslModule,
+    UsersModule,
+    // OrdersModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
     // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: LoggingInterceptor,
+    //   // Enable authentication globally
+    //   provide: APP_GUARD,
+    //   useClass: JwtAuthGuard,
     // },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
   ],
 })
 export class AppModule implements NestModule {

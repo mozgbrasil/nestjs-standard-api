@@ -1,4 +1,4 @@
-export class Customer {
+export class User  {
   // @PrimaryColumn()
   id: string;
 

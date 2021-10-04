@@ -17,16 +17,16 @@ import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
 import { LoggingInterceptor } from '../core/interceptors/logging.interceptor';
 import { Cat } from './interfaces/cat.interface';
-import { HttpExceptionFilter } from '../exceptions/http-exception.filter';
+// import { HttpExceptionFilter } from '../exceptions/http-exception.filter';
 import { RolesGuard } from '../common/guards/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
+// import { Roles } from '../common/decorators/roles.decorator';
 import {
   ApiBasicAuth,
   ApiBearerAuth,
   ApiHeader,
   ApiTags,
 } from '@nestjs/swagger';
-import { Public } from '../auth/guards/jwt-auth.guard';
+// import { Public } from '../auth/guards/jwt-auth.guard';
 
 // @TODO: Não vi efeito
 // @ApiBasicAuth()

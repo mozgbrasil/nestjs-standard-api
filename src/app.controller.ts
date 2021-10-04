@@ -2,27 +2,28 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
   Post,
   Render,
   Request,
   UseGuards,
-  Inject,
 } from '@nestjs/common';
-import { AppService } from './app.service';
-import { ClientProxy } from '@nestjs/microservices';
-import { Message } from './message.event';
 import { AuthGuard } from '@nestjs/passport';
-import { CreateCustomerDto } from './customer/dto/create-customer.dto';
+import { AppService } from './app.service';
+import { CreateUserDto } from './users/dto/create-user.dto';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { ApiHeader } from '@nestjs/swagger';
+import { Message } from './message.event';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Controller()
 export class AppController {
   constructor(
     // private readonly appService: AppService,
-    private authService: AuthService, // @Inject('HELLO_SERVICE') private readonly client: ClientProxy,
+    private authService: AuthService,
+    @Inject('HELLO_SERVICE') private readonly client: ClientProxy,
   ) {}
 
   async onApplicationBootstrap() {
@@ -34,29 +35,29 @@ export class AppController {
     // var message = this.appService.getHello();
     var data = new Date();
     var message = 'Hello World! ' + `(${data})`;
-    // this.client.emit<any>("message_printed", new Message(message));
+    this.client.emit<any>('message_printed', new Message(message));
     // this.client.emit<any>('create-company', new Message(message));
     // return message;
     // return this.appService.getHello();
   }
 
+  // @Render('index')
+  // render() {
+  //   const message = this.appService.getHello();
+  //   return { message };
+  // }
+
   // # Passport local
   @UseGuards(AuthGuard('local'))
   @Post('auth/login/local')
-  async login_local(
-    @Body() createCustomerDto: CreateCustomerDto,
-    @Request() req,
-  ) {
+  async login_local(@Body() createUserDto: CreateUserDto, @Request() req) {
     return req.user;
   }
 
   // # JWT functionality
   @UseGuards(LocalAuthGuard)
   @Post('auth/login/jwt')
-  async login_jwt(
-    @Body() createCustomerDto: CreateCustomerDto,
-    @Request() req,
-  ) {
+  async login_jwt(@Body() createUserDto: CreateUserDto, @Request() req) {
     return this.authService.login(req.user);
   }
 

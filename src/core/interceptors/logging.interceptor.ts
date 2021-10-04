@@ -6,19 +6,19 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import RabbitmqServer from '../../rabbitmq-server';
+// import RabbitmqServer from '../../rabbitmq-server';
 
-async function publishRabbitmqServer(logHttp) {
-  console.log('IIFE: ');
-  const server = new RabbitmqServer(process.env.AMQP_URL);
-  await server.start();
-  await server.publishInQueue(process.env.AMQP_QUEUE, JSON.stringify(logHttp));
-}
+// async function publishRabbitmqServer(logHttp) {
+//   console.log('IIFE: ');
+//   const server = new RabbitmqServer(process.env.AMQP_URL);
+//   await server.start();
+//   await server.publishInQueue(process.env.AMQP_QUEUE, JSON.stringify(logHttp));
+// }
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    console.log('Before...');
+    console.log('Core Before...: ', __filename);
 
     const ctx = context.switchToHttp();
     const req = ctx.getRequest();
@@ -33,18 +33,17 @@ export class LoggingInterceptor implements NestInterceptor {
       timestamp: timestamp,
     };
 
-    try {
-      publishRabbitmqServer(logHttp);
-    } catch (err) {
-      console.log('err: ', err);
-    }
+    // try {
+    //   publishRabbitmqServer(logHttp);
+    // } catch (err) {
+    //   console.log('err: ', err);
+    // }
 
     const now = Date.now();
-
     const ret = next.handle().pipe(
       tap(() => {
         setTimeout(() => {
-          console.log(`After... ${Date.now() - now}ms`);
+          console.log(`Core After... ${Date.now() - now}ms: `, __filename);
         }, 0);
       }),
     );

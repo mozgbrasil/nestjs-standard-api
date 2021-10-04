@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCustomerDto } from './dto/create-customer.dto';
-import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 // This should be a real class/interface representing a user entity
 export type User = any;
 
 @Injectable()
-export class CustomerService {
-
+export class UsersService {
   private readonly users: User[];
 
   constructor() {
@@ -30,13 +29,12 @@ export class CustomerService {
     ];
   }
 
-
-  create(createCustomerDto: CreateCustomerDto) {
-    return 'This action adds a new customer';
+  create(createUserDto: CreateUserDto) {
+    return 'This action adds a new user';
   }
 
   findAll() {
-    return `This action returns all customer`;
+    return `This action returns all users`;
   }
 
   async findOne(username: string): Promise<User | undefined> {
@@ -44,14 +42,14 @@ export class CustomerService {
   }
 
   // findOne(id: number) {
-  //   return `This action returns a #${id} customer`;
+  //   return `This action returns a #${id} user`;
   // }
 
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
+  update(id: number, updateUserDto: UpdateUserDto) {
+    return `This action updates a #${id} user`;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} customer`;
+    return `This action removes a #${id} user`;
   }
 }
