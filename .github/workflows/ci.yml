@@ -163,8 +163,7 @@ jobs:
   #         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
   #         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
   #         NETLIFY_DEPLOY_TO_PROD: true
-
-  docker-github-packages:
+  publish-docker:
     needs: [build-web]
     runs-on: ubuntu-latest
     # if: github.event_name == 'push'
@@ -177,7 +176,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Extract branch name
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/develop/})"
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
       - name: Push image
         run: |
