@@ -56,10 +56,10 @@ import { WalletsModule } from './wallets/wallets.module';
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: HttpExceptionFilter,
+    // },
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,

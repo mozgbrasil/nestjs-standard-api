@@ -4,7 +4,7 @@ import { Transaction } from '../../payments/entities/transaction.entity';
 // @Entity()
 export class Wallet {
   // @PrimaryColumn()
-  id: string;
+  id_seller: number;
 
   // @Column({ type: 'int', default: 0 })
   amount: number;
