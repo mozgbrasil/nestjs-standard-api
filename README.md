@@ -83,7 +83,7 @@ $ nest g resource payment
     }
 
 ```console
-$ curl -X POST http://localhost:3004/auth/login/jwt -d '{"username": "john", "password": "changeme"}' -H "Content-Type: application/json"`
+$ curl -X POST http://localhost:3004/auth/login/jwt -d '{"username": "john", "password": "changeme"}' -H "Content-Type: application/json"
 
 $ curl http://localhost:3004/profile -H "Authorization: Bearer ???"
 ```

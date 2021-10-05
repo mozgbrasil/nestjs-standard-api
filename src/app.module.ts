@@ -19,11 +19,19 @@ import { CatsModule } from './cats/cats.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SellerModule } from './seller/seller.module';
 import { PaymentModule } from './payment/payment.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { SellerSchema } from './seller/interfaces/seller.schema';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    CatsModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    MongooseModule.forRoot(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      // useCreateIndex: true,
+      useUnifiedTopology: true,
+      // useFindAndModify: false,
+    }),
+    MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema }]),
     AuthModule,
     ClientsModule.register([
       {
@@ -41,6 +49,7 @@ import { PaymentModule } from './payment/payment.module';
     UsersModule,
     SellerModule,
     PaymentModule,
+    CatsModule,
   ],
   controllers: [AppController],
   providers: [
