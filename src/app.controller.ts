@@ -14,7 +14,7 @@ import { CreateUserDto } from './users/dto/create-user.dto';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { ApiHeader } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiHeader, ApiOperation } from '@nestjs/swagger';
 import { Message } from './message.event';
 import { ClientProxy } from '@nestjs/microservices';
 
@@ -48,6 +48,12 @@ export class AppController {
 
   // # Passport local
   @UseGuards(AuthGuard('local'))
+  @ApiOperation({
+    summary: 'Auth Login Local',
+    description: 'Create a Auth Login Local',
+  })
+  @ApiCreatedResponse({ description: 'my ApiCreatedResponse' })
+  // @ApiConflictResponse({ description: 'failed login' })
   @Post('auth/login/local')
   async login_local(@Body() createUserDto: CreateUserDto, @Request() req) {
     return req.user;

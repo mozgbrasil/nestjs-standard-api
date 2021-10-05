@@ -35,7 +35,7 @@ async function bootstrap() {
     .setTitle('MJV API')
     .setDescription('The MJV API')
     .setVersion('1.0')
-    .addTag('cats')
+    .addTag('default')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);

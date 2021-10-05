@@ -1,27 +1,29 @@
-import { APP_FILTER, APP_PIPE, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
-import { HttpExceptionFilter } from './exceptions/http-exception.filter';
-import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
 import {
   Module,
   NestModule,
   MiddlewareConsumer,
   ValidationPipe,
 } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
-import { RolesGuard } from './common/guards/roles.guard';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { CatsModule } from './cats/cats.module';
+import { APP_FILTER, APP_PIPE, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { SellerModule } from './seller/seller.module';
-import { PaymentModule } from './payment/payment.module';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { SellerSchema } from './seller/interfaces/seller.schema';
 
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+
+import { HttpExceptionFilter } from './exceptions/http-exception.filter';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { RolesGuard } from './common/guards/roles.guard';
+import { UsersModule } from './users/users.module';
+import { CatsModule } from './cats/cats.module';
+import { SellerSchema } from './sellers/interfaces/seller.schema';
+import { SellersModule } from './sellers/sellers.module';
+import { PaymentsModule } from './payments/payments.module';
+import { WalletsModule } from './wallets/wallets.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -31,7 +33,6 @@ import { SellerSchema } from './seller/interfaces/seller.schema';
       useUnifiedTopology: true,
       // useFindAndModify: false,
     }),
-    MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema }]),
     AuthModule,
     ClientsModule.register([
       {
@@ -47,9 +48,10 @@ import { SellerSchema } from './seller/interfaces/seller.schema';
       },
     ]),
     UsersModule,
-    SellerModule,
-    PaymentModule,
-    CatsModule,
+    // CatsModule,
+    SellersModule,
+    PaymentsModule,
+    WalletsModule,
   ],
   controllers: [AppController],
   providers: [

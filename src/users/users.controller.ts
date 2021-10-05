@@ -40,4 +40,11 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
+
+  //
+
+  @Post('mongodb')
+  createMongoRecord(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.createMongoRecord(createUserDto);
+  }
 }

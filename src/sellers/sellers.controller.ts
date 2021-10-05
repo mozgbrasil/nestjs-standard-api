@@ -8,11 +8,12 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { SellerService } from './seller.service';
+import { SellersService } from './sellers.service';
 import { CreateSellerDto } from './dto/create-seller.dto';
 import { UpdateSellerDto } from './dto/update-seller.dto';
 import {
   ApiBearerAuth,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
@@ -24,41 +25,41 @@ import { SellerGuard } from './guards/seller.guard';
 import { DecodeJwt } from '../common/decorators/decode-jwt.decortator';
 import { AuthenticatedUser } from '../common/dtos/authenticatedUser.dto';
 
-@ApiTags('seller')
-@Controller('seller')
-export class SellerController {
-  constructor(private readonly sellerService: SellerService) {}
+@ApiTags('sellers')
+@Controller('sellers')
+export class SellersController {
+  constructor(private readonly sellersService: SellersService) {}
+
+  @Post()
+  create(@Body() createSellerDto: CreateSellerDto) {
+    return this.sellersService.create(createSellerDto);
+  }
 
   @Get()
   findAll() {
-    return this.sellerService.findAll();
+    return this.sellersService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.sellerService.findOne(+id);
+    return this.sellersService.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSellerDto: UpdateSellerDto) {
-    return this.sellerService.update(+id, updateSellerDto);
+    return this.sellersService.update(+id, updateSellerDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.sellerService.remove(+id);
+    return this.sellersService.remove(+id);
   }
 
   //
 
-  @ApiOperation({
-    summary: 'Seller account create',
-    description: 'Create a new Seller account',
-  })
-  @ApiCreatedResponse({ description: 'Seller account created' })
-  @Post()
-  create(@Body() createSellerDto: CreateSellerDto) {
-    return this.sellerService.create(createSellerDto);
+  @Post('mongodb')
+  createMongoRecord(@Body() createSellerDto: CreateSellerDto) {
+    return this.sellersService.createMongoRecord(createSellerDto);
   }
 
   // @UseGuards(JwtAuthGuard, SellerGuard)
@@ -74,7 +75,7 @@ export class SellerController {
   // @ApiBearerAuth('JWT-auth')
   // @Get('profile')
   // findSellerById(@DecodeJwt() auth: AuthenticatedUser) {
-  //   return this.sellerService.findSellerById(auth.id);
+  //   return this.sellersService.findSellerById(auth.id);
   // }
 
   // @UseGuards(JwtAuthGuard, SellerGuard)
@@ -90,7 +91,7 @@ export class SellerController {
   // @ApiBearerAuth('JWT-auth')
   // @Get('payments')
   // findSellerPayments(@DecodeJwt() auth: AuthenticatedUser) {
-  //   return this.sellerService.findSellerPayments(auth.id);
+  //   return this.sellersService.findSellerPayments(auth.id);
   // }
 
   // @UseGuards(JwtAuthGuard, SellerGuard)
@@ -106,6 +107,6 @@ export class SellerController {
   // @ApiBearerAuth('JWT-auth')
   // @Get('wallet')
   // findSellerWallet(@DecodeJwt() auth: AuthenticatedUser) {
-  //   return this.sellerService.findSellerWallet(auth.id);
+  //   return this.sellersService.findSellerWallet(auth.id);
   // }
 }

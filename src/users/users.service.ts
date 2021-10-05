@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
-// This should be a real class/interface representing a user entity
-export type User = any;
-
+import { User } from './entities/user.entity';
+// class/interface representing a user entity
+export type LocalUser = any;
 @Injectable()
 export class UsersService {
-  private readonly users: User[];
+  private readonly users: LocalUser[];
 
-  constructor() {
+  constructor(@InjectModel('User') private readonly userMyModel: Model<User>) {
     this.users = [
       {
         userId: 1,
@@ -37,6 +39,10 @@ export class UsersService {
     return `This action returns all users`;
   }
 
+  // findOne(id: number) {
+  //   return `This action returns a #${id} cat`;
+  // }
+
   async findOne(username: string): Promise<User | undefined> {
     return this.users.find((user) => user.username === username);
   }
@@ -51,5 +57,16 @@ export class UsersService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  //
+
+  async createMongoRecord(createUserDto: CreateUserDto): Promise<User> {
+    // return 'This action adds a new user';
+    const saved = await new this.userMyModel(createUserDto).save();
+    if (!saved) {
+      throw new RpcException('Problem to create a record');
+    }
+    return saved;
   }
 }

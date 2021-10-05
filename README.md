@@ -14,15 +14,16 @@
 $ nest --help
 $ nest new nestjs-standard-api
 
-$ yarn add amqplib amqp-connection-manager @nestjs/microservices amqplib joi @nestjs/jwt passport-jwt @nestjs/passport passport passport-local @nestjs/config @nestjs/swagger swagger-ui-express class-validator class-transformer cielo
+$ yarn add crypt @types/bcrypt amqplib amqp-connection-manager @nestjs/microservices amqplib joi @nestjs/jwt passport-jwt @nestjs/passport passport passport-local @nestjs/config @nestjs/swagger swagger-ui-express class-validator class-transformer cielo
 
 $ yarn add @types/joi @types/passport-local @types/passport-jwt -D
 
 $ nest g resource auth
 $ nest g resource cats
-$ nest g resource customer
-$ nest g resource seller
-$ nest g resource payment
+$ nest g resource users
+$ nest g resource sellers
+$ nest g resource payments
+$ nest g resource wallets
 
 ```
 
