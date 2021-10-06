@@ -103,27 +103,7 @@ $ find . -name "*.*-DISABLED" -type f
 
 - Implementado integração junto a Cielo no endpoint /orders de transação está funcional via API
 
-Implementado RabbitMQ seguindo metodologia a seguir
-
-Feito uso do "Interceptor" e armazenando os requests da API para uma fila no RabbitMQ
-
-Usando RabbitMQ local e na nuvem usando o serviço cloudamqp.com
-
-Tenho uma duvida
-
-Devo armazenar as respostas da API correto ?
-
-Sabe me informar se é possivel usando o "Interceptor" pois ainda não consegui e li esse artigo mencionando que náo é possivel
-https://newbedev.com/nestjs-intercept-and-modify-outgoing-http-request
-
-Se não for possivel eu chamo o método de publicar no "RabbitMQ" para cada response
-
-@TODO: Como armazenar os retornos em fila no RabbitMQ ?
-@TODO: Consumir fila do RabbitMQ e armazenar em banco de dados
-
-Prosseguindo com os proximos passos
-
-👇️
+- Implementado RabbitMQ usando client nativo e "APP_INTERCEPTOR"
 
 👇️
 
@@ -170,9 +150,130 @@ deverá ser invocado nesses momentos.
 8 – Cuidado com a autenticação. Um usuário não pode acessar os endpoints do outro tipo de
 usuário. Utilize autenticação Bearer token JWT.
 
-ℹ️ @TODO:
+👕️ Feito
 
 👾️⚙️
+
+## Melhorias
+
+Sobre os itens para alinhamento enviada pelo Discord
+
+### API
+
+1. Padrões REST
+
+A api deve ter o formato rest, nesse formato, uma resposta em texto puro não é apropriada. uma api rest padrão deve responder somente json (application/json)
+
+> > basta ajustar as responses para não retornar uma string, e sim um objeto, como por exemplo return { message: "mensagem aqui" } em vez de algo como return "mensagem aqui", o nest já detectará o objeto e mudará a resposta para application/json sem nenhum ajuste ser necessário.
+
+👕️ Detectei somente no controller inicial o retorno como string, os demais controller é enviado no formato json
+
+Feito a Correção
+
+https://nestjs-standard-api.herokuapp.com/
+
+2. docker-compose
+
+Não encontrei seu arquivo docker-compose, que deveria levantar o servidor do rabbitmq e dos seus bancos de dados localmente. A api deve poder rodar totalmente local, integrando-se aos serviços necessários via docker.
+
+> > criar arquivo docker-compose com sua infra e configurar a api, via variaveis de ambiente, para conectar-se com esses serviços localmente
+
+👕️ feito `docker-compose up dev`
+
+3. Orientação a objeto nas classes de serviço
+
+Notei varias funções declaradas DENTRO das classes de serviço. O Nestjs usa a orientação a objeto clássica em suas classes, o que significa que, dentro das classes, devemos implementar somente MÉTODOS. Funções nesse contexto não é uma boa prática e ferem os conceitos de S.O.L.I.D e do Clean Code. Observe que a orientação a objetos é obrigatória somente nas classes, você ainda pode criar e exportar funções sem problemas, mas essas funções devem estar fora da classe, jamais dentro. você pode chamar essas funções externas de dentro dos métodos da sua classe se achar apropriado, apenas não crie essas funções de dentro da classe.
+
+Ex: A função cieloDebitCard() deveria estar sendo exportada de outro arquivo e ser apenas chamada na classe dentro de algum método. Outra alternativa seria transformar essa função em um método privado da própria classe.
+
+> > refatorar as classes de serviço para não implementarem funções, substitua por métodos e utilize o construtor da classe sempre que achar necessário incializar alguma propriedade ou fluxo da classe em sua inicialização.
+
+ℹ️ @TODO:
+
+4. Métodos não implementados.
+
+podemos ver que os métodos principais ainda não estão implementados, estão retornando apenas uma string pura diretamente (vide o item 1).
+A função cieloDebitCard(), com as devidas considerações do item 3, parece ok, mas tente deixa-la mais dinamica, passando como argumento o ID do pagamento/pedido e referenciando esse id no campo merchantOrderId, para que assim possamos ter uma rastreabilidade melhor dos pagamentos na cielo.
+
+ℹ️ @TODO:
+
+5. DTOs não documentados
+
+Os DTOs das requisições não estão documentados no swagger.
+
+ℹ️ @TODO:
+
+6. Multiplas conexões com o RabbitMQ
+
+O guard que envia as requisições ao rabbitmq está instanciando uma nova conexão a cada chamada que chega à api.
+
+> > refatore a conexão ao rabbit criando um modulo que cria uma unica conexão ao rabbitmq e exporta o canal de transmissao como um singleton único também, de maneira que essa conexão e esse canal sejam instanciados apenas uma única vez e sua conexão seja reaproveitada em todas as chamadas.
+
+ℹ️ @TODO:
+
+7. Requisição à cielo não está sendo enviada para a fila de logs do rabbitmq.
+
+Na função de envio do pagamento à cielo, não vi nenhum ponto do código que envia o log dessa requisição à fila dos logs.
+
+👕️
+
+8. Autenticação
+   Não vi nenhum mecanismo de auteticação implementado.
+
+👕️ feito
+
+### MICRO-SERVIÇO
+
+1. Lógica no controller
+
+vi muita lógica de negócio dentro do controller, o que fere o principio da responsabilidade única do S.O.L.I.D. O controller deve lidar apenas com os aspectos da requisição ou evento que chegam, enquanto o processamento de negócio desses dados devem ser feitos pelo service.
+
+ℹ️ @TODO:
+
+2. Códigos desnecessários
+
+O microserviço deve fazer apenas 2 coisas: ouvir as requisições que chegam na fila e salvar essas requisições no banco. ( e pelo que vi, ele já está fazendo isso )
+No controller do microservice existe uma quantidade grande de código desnecessário, ferindo o clean code. elimine os códigos desnecessários do microserviço, deixando somente o que é necessário para que ele cumpra seus objetivos e nada a mais.
+
+ℹ️ @TODO:
+
+RESUMO:
+
+- A api tem uma função de envio de pagamento à cielo mas ainda não tem essa funcionalidade implementada para o usuário criar o pagamento
+
+- nenhum dos casos de uso contidos no diagrama de casos de uso do teste está implementado
+
+- nenhuma autenticação foi implementada
+
+- falta docker-compose para testar o projeto
+
+- os logs aparentemente estão sendo salvos, mas somente os que são recebidos pela api. falta logar as requisições que são feitas pela pópria api (cielo)
+
+- varias quebras dos principios S.O.L.I.D (principalmente o primeiro e o quinto) e do Clean Code. (lógicas de serviço dentro do controller no microserviço, códigos altamente acoplados, definição de funções dentro de classes, método construtor não utilizado)
+
+- o microserviço está praticamente pronto, agora falta somente os ajustes citados.
+
+INSTRUÇÕES
+
+- Ler um pouco mais sobre S.O.L.I.D e clean code (prioridade).
+
+👕️ Venho vendo videos que abordam essas práticas para eu adotar ela nos projetos
+
+- mover a lógica do controller para dentro do service no microserviço e eliminar códigos desnecessários
+
+👕️ feito
+
+- implemente os casos de uso do teste, considerando a autenticação
+
+ℹ️ @TODO:
+
+- proceda com os ajustes citados na conexão do rabbit na api
+
+ℹ️ @TODO:
+
+- implemente o envio do log da requisição da cielo para a fila
+
+ℹ️ @TODO:
 
 ## Contribuição
 

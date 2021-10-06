@@ -1,26 +1,41 @@
-version: "3"
+version: "3.3"
+
+# docker-compose up dev
+# docker-compose up prod
 
 services:
-  app:
+  dev:
+    container_name: nestjs_api_dev
+    image: nestjs-api-dev:1.0.0
     build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        # [Choice] Node.js version: 14, 12, 10
-        VARIANT: 14
-        # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
-        USER_UID: 1000
-        USER_GID: 1000
-    volumes:
-      - ..:/workspace:cached
-    # Overrides default command so things don't shut down after the process ends.
-    command: sleep infinity
-    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    # network_mode: "service:mongodb"
-    # host = work / bridge = not work devcontainer /
+        context: .
+        # target: development
+        dockerfile: ./Dockerfile
+    command: npm run start:debug
+    ports:
+        - 3000:3000
+        - 9229:9229
     network_mode: "host"
-    # Uncomment the next line to use a non-root user for all processes.
-    # user: node
+    volumes:
+        - .:/usr/src/app
+        - /usr/src/app/node_modules
+    restart: unless-stopped
+  prod:
+    container_name: nestjs_api_prod
+    image: nestjs-api-prod:1.0.0
+    build:
+        context: .
+        # target: production
+        dockerfile: ./Dockerfile
+    command: npm run start:prod
+    ports:
+        - 3000:3000
+        - 9229:9229
+    network_mode: "host"
+    volumes:
+        - .:/usr/src/app
+        - /usr/src/app/node_modules
+    restart: unless-stopped
   mongodb:
     image: mongo:latest
     network_mode: "host"
@@ -34,15 +49,15 @@ services:
     #  MONGO_INITDB_ROOT_USERNAME: root
     #  MONGO_INITDB_ROOT_PASSWORD: example
     #  MONGO_INITDB_DATABASE: your-database-here
-  mongo-express:
-    image: mongo-express
-    network_mode: "host"
-    restart: unless-stopped
-    # @TODO: Error, Not Work
-    ports:
-      - 8081:8081
-    depends_on:
-      - mongodb
+  # mongo-express:
+  #   image: mongo-express
+  #   network_mode: "host"
+  #   restart: unless-stopped
+  #   # @TODO: Error, Not Work
+  #   ports:
+  #     - 8081:8081
+  #   depends_on:
+  #     - mongodb
   postgres:
     image: "postgres:9.6"
     network_mode: "host"
@@ -69,7 +84,7 @@ services:
     ports:
       - "15432:15432"
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@gmail.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
     volumes:
       - "volume-pgadmin:/var/lib/pgadmin"

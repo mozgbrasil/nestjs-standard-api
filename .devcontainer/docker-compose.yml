@@ -40,15 +40,15 @@ services:
     #  MONGO_INITDB_ROOT_USERNAME: root
     #  MONGO_INITDB_ROOT_PASSWORD: example
     #  MONGO_INITDB_DATABASE: your-database-here
-  mongo-express:
-    image: mongo-express
-    network_mode: "host"
-    restart: unless-stopped
-    # @TODO: Error, Not Work
-    ports:
-      - 8081:8081
-    depends_on:
-      - mongodb
+  # mongo-express:
+  #   image: mongo-express
+  #   network_mode: "host"
+  #   restart: unless-stopped
+  #   # @TODO: Error, Not Work
+  #   ports:
+  #     - 8081:8081
+  #   depends_on:
+  #     - mongodb
   postgres:
     image: "postgres:9.6"
     network_mode: "host"
@@ -75,7 +75,7 @@ services:
     ports:
       - "15432:15432"
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@gmail.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
     volumes:
       - "volume-pgadmin:/var/lib/pgadmin"
