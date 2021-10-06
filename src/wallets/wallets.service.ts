@@ -35,12 +35,19 @@ export class WalletsService {
   //
 
   async createMongoRecord(createWalletDto: CreateWalletDto): Promise<Wallet> {
-    // return 'This action adds a new seller';
     const saved = await new this.walletMyModel(createWalletDto).save();
 
     if (!saved) {
       throw new RpcException('Problem to create a record');
     }
     return saved;
+  }
+
+  async findMongoRecord() {
+    const results = await this.walletMyModel.find({});
+    if (!results) {
+      throw new RpcException('Problem to list a record');
+    }
+    return results;
   }
 }

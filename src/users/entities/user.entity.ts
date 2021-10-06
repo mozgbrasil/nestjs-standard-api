@@ -1,5 +1,32 @@
+import { Payment } from '../../payments/entities/payment.entity';
+// import {
+//   Column,
+//   CreateDateColumn,
+//   Entity,
+//   OneToMany,
+//   PrimaryColumn,
+// } from 'typeorm';
+
+// @Entity()
 export class User {
-  name: string;
+  // @PrimaryColumn()
+  // id: string;
+
+  // @Column()
+  username: string;
+
+  // @Column()
   email: string;
+
+  // @Column()
   password: string;
+
+  // @OneToMany((type) => Payment, (payment) => payment.customer)
+  payments: Payment[];
+
+  // @Column({ default: 'Customer' })
+  accountType: string;
+
+  // @CreateDateColumn()
+  created_at: Date;
 }

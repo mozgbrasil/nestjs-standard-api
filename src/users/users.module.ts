@@ -4,12 +4,16 @@ import { UsersController } from './users.controller';
 import { AuthModule } from '../auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './interfaces/user.schema';
+import { PaymentSchema } from '../payments/interfaces/payment.schema';
 
 @Module({
   imports: [
     // Fix: A circular dependency between modules. Use forwardRef() to avoid it
     forwardRef(() => AuthModule),
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: 'User', schema: UserSchema },
+      { name: 'Payment', schema: PaymentSchema },
+    ]),
   ],
   controllers: [UsersController],
   providers: [UsersService],

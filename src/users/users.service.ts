@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Payment } from '../payments/entities/payment.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -9,24 +10,40 @@ import { User } from './entities/user.entity';
 export type LocalUser = any;
 @Injectable()
 export class UsersService {
+  @InjectModel('User') private readonly userMyModel: Model<User>;
+  @InjectModel('Payment') private readonly paymentMyModel: Model<Payment>;
+
   private readonly users: LocalUser[];
 
-  constructor(@InjectModel('User') private readonly userMyModel: Model<User>) {
+  constructor() {
+    // @InjectModel('User') private readonly userMyModel: Model<User>
     this.users = [
       {
         userId: 1,
         username: 'john',
         password: 'changeme',
+        email: 'johndoe@gmail.com',
+        payments: 'payments',
+        created_at: '2021-10-06',
+        accountType: 'Customer',
       },
       {
         userId: 2,
         username: 'chris',
         password: 'secret',
+        email: 'johndoe@gmail.com',
+        payments: 'payments',
+        created_at: '2021-10-06',
+        accountType: 'Customer',
       },
       {
         userId: 3,
         username: 'maria',
         password: 'guess',
+        email: 'johndoe@gmail.com',
+        payments: 'payments',
+        created_at: '2021-10-06',
+        accountType: 'Customer',
       },
     ];
   }
@@ -62,11 +79,37 @@ export class UsersService {
   //
 
   async createMongoRecord(createUserDto: CreateUserDto): Promise<User> {
-    // return 'This action adds a new user';
     const saved = await new this.userMyModel(createUserDto).save();
     if (!saved) {
       throw new RpcException('Problem to create a record');
     }
     return saved;
+  }
+
+  async findMongoRecord() {
+    const results = await this.userMyModel.find({});
+    if (!results) {
+      throw new RpcException('Problem to list a record');
+    }
+    return results;
+  }
+
+  async findCustomerById(id: any) {
+    const result = await this.userMyModel.findOne({ _id: id });
+
+    var obj = result.toJSON();
+
+    return obj;
+  }
+
+  async findCustomerPayments(id: string) {
+    // const customer = await this.userMyModel.findOne(id);
+    // const payments = await this.paymentMyModel.find({
+    //   where: { customer: customer },
+    // });
+    // const paymentsReturn = payments.map(
+    //   ({ seller, customer, ...paymentsReturn }) => paymentsReturn,
+    // );
+    // return paymentsReturn;
   }
 }

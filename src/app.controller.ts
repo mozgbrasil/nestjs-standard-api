@@ -14,9 +14,15 @@ import { CreateUserDto } from './users/dto/create-user.dto';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { ApiCreatedResponse, ApiHeader, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiHeader,
+  ApiOperation,
+} from '@nestjs/swagger';
 import { Message } from './message.event';
 import { ClientProxy } from '@nestjs/microservices';
+import { CustomerGuard } from './users/guards/user.guard';
 
 @Controller()
 export class AppController {
@@ -66,12 +72,8 @@ export class AppController {
     return this.authService.login(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
-  // @Todo: Não funciona como esperado pois adiciona ; em posição inesperada, deveria ser adicionado após Authorization, mas não funciona
-  @ApiHeader({
-    name: 'Authorization ',
-    description: 'Custom header',
-  })
+  @UseGuards(JwtAuthGuard, CustomerGuard)
+  @ApiBearerAuth('JWT-auth')
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;

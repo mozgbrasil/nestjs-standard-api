@@ -7,17 +7,26 @@ GET {{baseUrl}}/ HTTP/1.1
 ###
 
 # @name login
-POST {{baseUrl}}/login HTTP/1.1
+POST {{baseUrl}}/auth/login/jwt HTTP/1.1
 content-type: application/json
 
-{"username": "john", "password": "changeme"}
+{
+  "username": "john",
+  "email": "johndoe@gmail.com",
+  "password": "changeme",
+  "payments": "payments",
+  "created_at": "2021-10-06",
+  "accountType": "Customer"
+}
 
 ###
 
 @authToken = {{login.response.headers.X-AuthToken}}
+@access_token = {{login.response.body.access_token}}
 
 # @name profile
 GET {{baseUrl}}/profile HTTP/1.1
+Authorization: Bearer {{access_token}}
 
 ###
 

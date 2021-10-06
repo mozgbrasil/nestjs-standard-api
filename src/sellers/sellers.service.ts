@@ -2,8 +2,6 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import * as bcrypt from 'bcrypt';
-import * as uuid from 'uuid';
 import { CreateSellerDto } from './dto/create-seller.dto';
 import { UpdateSellerDto } from './dto/update-seller.dto';
 import { Seller } from './entities/seller.entity';
@@ -42,16 +40,23 @@ export class SellersService {
   //
 
   async createMongoRecord(createSellerDto: CreateSellerDto): Promise<Seller> {
-    // return 'This action adds a new seller';
-    const saved = await new this.sellerMyModel(createSellerDto).save();
+    const result = await new this.sellerMyModel(createSellerDto).save();
 
-    if (!saved) {
+    if (!result) {
       throw new RpcException('Problem to create a record');
     }
-    return saved;
+    return result;
   }
 
-  async createSeller({ name, email, password }: CreateSellerDto) {
+  async findMongoRecord() {
+    const results = await this.sellerMyModel.find({});
+    if (!results) {
+      throw new RpcException('Problem to list a record');
+    }
+    return results;
+  }
+
+  async createSeller({ username, email, password }: CreateSellerDto) {
     const userAlreadyExists = await this.sellerMyModel.findOne({
       where: { email: email },
     });
@@ -62,51 +67,34 @@ export class SellersService {
 
     const seller = new Seller();
 
-    const id = uuid.v4();
+    const wallet = await this.createWallet(username);
 
-    const wallet = await this.createWallet(name);
-
-    // const saltOrRounds = 10;
-    // password = await bcrypt.hash(password, saltOrRounds);
-
-    // Object.assign(seller, {
-    //   id,
-    //   name,
-    //   email,
-    //   password,
-    //   wallet,
-    // });
-
-    // await this.sellerMyModel.save(seller);
+    // await this.sellerMyModel(createSellerDto).save();
   }
 
-  // async findSellerPayments(id: string) {
-  //   const seller = await this.sellerMyModel.findOne(id);
+  async findSellerPayments(id: string) {
+    // const seller = await this.sellerMyModel.findOne(id);
+    // const payments = await this.paymentMyModel.find({
+    //   where: { seller: seller },
+    // });
+    // const paymentsReturn = payments.map(
+    //   ({ seller, customer, debitCard, ...paymentsReturn }) => paymentsReturn,
+    // );
+    // return paymentsReturn;
+  }
 
-  //   const payments = await this.paymentMyModel.find({
-  //     where: { seller: seller },
-  //   });
+  async findSellerById(id: string) {
+    const result = await this.sellerMyModel.findOne({ _id: id });
 
-  //   const paymentsReturn = payments.map(
-  //     ({ seller, customer, debitCard, ...paymentsReturn }) => paymentsReturn,
-  //   );
+    var obj = result.toJSON();
 
-  //   return paymentsReturn;
-  // }
+    return obj;
+  }
 
-  // async findSellerById(id: string) {
-  //   const seller = await this.sellerMyModel.findOne(id);
-
-  //   const { password, wallet, ...sellerReturn } = seller;
-
-  //   return sellerReturn;
-  // }
-
-  // async findSellerWallet(id: string) {
-  //   const seller = await this.sellerMyModel.findOne(id);
-
-  //   return seller.wallet;
-  // }
+  async findSellerWallet(id: string) {
+    // const seller = await this.sellerMyModel.findOne(id);
+    // return seller.wallet;
+  }
 
   async createWallet(sellerName: string) {
     const saved = await new this.walletMyModel(CreateWalletDto).save();

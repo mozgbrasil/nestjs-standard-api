@@ -20,7 +20,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { SellerGuard } from './guards/seller.guard';
 import { DecodeJwt } from '../common/decorators/decode-jwt.decortator';
 import { AuthenticatedUser } from '../common/dtos/authenticatedUser.dto';
@@ -30,83 +30,66 @@ import { AuthenticatedUser } from '../common/dtos/authenticatedUser.dto';
 export class SellersController {
   constructor(private readonly sellersService: SellersService) {}
 
-  @Post()
-  create(@Body() createSellerDto: CreateSellerDto) {
-    return this.sellersService.create(createSellerDto);
-  }
+  // @Post()
+  // create(@Body() createSellerDto: CreateSellerDto) {
+  //   return this.sellersService.create(createSellerDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.sellersService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.sellersService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sellersService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.sellersService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSellerDto: UpdateSellerDto) {
-    return this.sellersService.update(+id, updateSellerDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateSellerDto: UpdateSellerDto) {
+  //   return this.sellersService.update(+id, updateSellerDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sellersService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.sellersService.remove(+id);
+  // }
 
   //
 
-  @Post('mongodb')
+  @Post('mongo-create')
   createMongoRecord(@Body() createSellerDto: CreateSellerDto) {
     return this.sellersService.createMongoRecord(createSellerDto);
   }
 
-  // @UseGuards(JwtAuthGuard, SellerGuard)
-  // @ApiOperation({
-  //   summary: "Show seller's profile",
-  //   description: "Get basic seller's informations",
-  // })
-  // // @ApiOkResponse({
-  // //   description: "Return seller's profile",
-  // //   schema: SellerProfileResponseSchema,
-  // // })
-  // @ApiUnauthorizedResponse({ description: 'Invalid Token' })
-  // @ApiBearerAuth('JWT-auth')
-  // @Get('profile')
-  // findSellerById(@DecodeJwt() auth: AuthenticatedUser) {
-  //   return this.sellersService.findSellerById(auth.id);
-  // }
+  @Get('mongo-list')
+  findAll() {
+    return this.sellersService.findMongoRecord();
+  }
 
-  // @UseGuards(JwtAuthGuard, SellerGuard)
-  // @ApiOperation({
-  //   summary: "Show all seller's payments",
-  //   description: "Get all seller's payments",
-  // })
-  // // @ApiOkResponse({
-  // //   description: 'Return all seller payments',
-  // //   schema: GetSellerPaymentsResponseSchema,
-  // // })
-  // @ApiUnauthorizedResponse({ description: 'Invalid Token' })
-  // @ApiBearerAuth('JWT-auth')
-  // @Get('payments')
-  // findSellerPayments(@DecodeJwt() auth: AuthenticatedUser) {
-  //   return this.sellersService.findSellerPayments(auth.id);
-  // }
+  @UseGuards(JwtAuthGuard, SellerGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Get('profile')
+  findSellerById(@DecodeJwt() auth: AuthenticatedUser) {
+    return this.sellersService.findSellerById(auth._id);
+  }
 
-  // @UseGuards(JwtAuthGuard, SellerGuard)
-  // @ApiOperation({
-  //   summary: "Show seller's wallet",
-  //   description: "Get the seller's wallet",
-  // })
-  // // @ApiOkResponse({
-  // //   description: "Return seller's wallet",
-  // //   schema: SellerWalletResponse,
-  // // })
-  // @ApiUnauthorizedResponse({ description: 'Invalid Token' })
-  // @ApiBearerAuth('JWT-auth')
-  // @Get('wallet')
-  // findSellerWallet(@DecodeJwt() auth: AuthenticatedUser) {
-  //   return this.sellersService.findSellerWallet(auth.id);
-  // }
+  @Post('create 🛑️')
+  createSeller(@Body() createSellerDto: CreateSellerDto) {
+    return this.sellersService.createSeller(createSellerDto);
+  }
+
+  @UseGuards(JwtAuthGuard, SellerGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Get('payments 🛑️')
+  findSellerPayments(@DecodeJwt() auth: AuthenticatedUser) {
+    return this.sellersService.findSellerPayments(auth._id);
+  }
+
+  @UseGuards(JwtAuthGuard, SellerGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Get('wallet 🛑️')
+  findSellerWallet(@DecodeJwt() auth: AuthenticatedUser) {
+    return this.sellersService.findSellerWallet(auth._id);
+  }
 }

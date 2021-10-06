@@ -1,11 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UsersService } from '../users/users.service';
-import { JwtService } from '@nestjs/jwt';
+import { User } from '../users/entities/user.entity';
+import { Seller } from '../sellers/entities/seller.entity';
 
 @Injectable()
 export class AuthService {
+  @InjectModel('User') private readonly userMyModel: Model<User>;
+  @InjectModel('Seller') private readonly sellerMyModel: Model<Seller>;
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -31,6 +38,8 @@ export class AuthService {
     return `This action removes a #${id} auth`;
   }
 
+  //
+
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
     if (user && user.password === pass) {
@@ -41,52 +50,38 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+    // const payload = { username: user.username, sub: user.userId };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(user),
     };
   }
 
   async validateCustomer(email: string, password: string): Promise<any> {
-    // const customer = await this.customerRepository.findOne({
-    //   where: { email: email },
-    // });
+    const result = await this.userMyModel.findOne({
+      where: { email: email },
+    });
 
-    // if (!customer) {
-    //   throw new UnauthorizedException('Email or Password incorrect');
-    // }
+    if (!result) {
+      throw new UnauthorizedException('Email or Password incorrect');
+    }
 
-    // const isMatchCustomer = await bcrypt.compare(password, customer.password);
-    // if (isMatchCustomer) {
-    //   const { password, ...result } = customer;
-    //   return result;
-    // }
+    var obj = result.toJSON();
 
-    // throw new UnauthorizedException('Email or Password incorrect');
-
-    console.log('@TODO validateCustomer');
-
-    return '@TODO validateCustomer';
+    return obj;
   }
 
   async validateSeller(email: string, password: string): Promise<any> {
-    // const seller = await this.sellerRepository.findOne({
-    //   where: { email: email },
-    // });
+    const result = await this.sellerMyModel.findOne({
+      where: { email: email },
+    });
 
-    // if (!seller) {
-    //   throw new UnauthorizedException('Email or Password incorrect');
-    // }
+    if (!result) {
+      throw new UnauthorizedException('Email or Password incorrect');
+    }
 
-    // const isMatchSeller = await bcrypt.compare(password, seller.password);
-    // if (isMatchSeller) {
-    //   const { password, ...result } = seller;
-    //   return result;
-    // }
+    var obj = result.toJSON();
 
-    // throw new UnauthorizedException('Email or Password incorrect');
-    console.log('@TODO validateSeller');
-    return '@TODO validateSeller';
+    return obj;
   }
 
   async login_b2b(user: any) {

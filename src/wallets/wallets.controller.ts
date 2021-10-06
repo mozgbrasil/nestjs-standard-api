@@ -17,35 +17,40 @@ import { ApiTags } from '@nestjs/swagger';
 export class WalletsController {
   constructor(private readonly walletsService: WalletsService) {}
 
-  @Post()
-  create(@Body() createWalletDto: CreateWalletDto) {
-    return this.walletsService.create(createWalletDto);
-  }
+  // @Post()
+  // create(@Body() createWalletDto: CreateWalletDto) {
+  //   return this.walletsService.create(createWalletDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.walletsService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.walletsService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.walletsService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.walletsService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWalletDto: UpdateWalletDto) {
-    return this.walletsService.update(+id, updateWalletDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateWalletDto: UpdateWalletDto) {
+  //   return this.walletsService.update(+id, updateWalletDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.walletsService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.walletsService.remove(+id);
+  // }
 
   //
 
-  @Post('mongodb')
+  @Post('mongo-create')
   createMongoRecord(@Body() createWalletDto: CreateWalletDto) {
     return this.walletsService.createMongoRecord(createWalletDto);
+  }
+
+  @Get('mongo-list')
+  findAll() {
+    return this.walletsService.findMongoRecord();
   }
 }
