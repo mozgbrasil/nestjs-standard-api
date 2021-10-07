@@ -9,7 +9,15 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ClientProxy } from '@nestjs/microservices';
 import { Message } from '../../message.event';
+import RabbitmqServer from '../../common/rabbitmq-server';
 
+async function rabbitmqServer(request) {
+  const server = new RabbitmqServer(process.env.AMQP_URL);
+  await server.start();
+  await server.publishInQueue(process.env.AMQP_QUEUE, JSON.stringify(request));
+  // await server.publishInExchange('amq.direct','rota2', JSON.stringify(request.body));
+  return request;
+}
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   constructor(
@@ -32,7 +40,17 @@ export class LoggingInterceptor implements NestInterceptor {
       timestamp: timestamp,
     };
 
-    this.client.emit<any>('create-rmq-channel', new Message(message));
+    var payload = {
+      pattern: 'create-rmq-channel',
+      data: message,
+    };
+    rabbitmqServer(payload);
+
+    //
+    // @TODO:
+    // "this.client.emit" send in pattern "{ pattern: 'n', data: text: {?}, }", how to use "this.client" to send pattern "{ pattern: 'n', data: {?}, }"
+    //
+    // this.client.emit<any>('create-rmq-channel', new Message(message));
 
     const now = Date.now();
     const ret = next.handle().pipe(

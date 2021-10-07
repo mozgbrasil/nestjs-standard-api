@@ -28,17 +28,17 @@ export class CreateUserDto {
   @ApiProperty({
     type: [String],
     description: 'The payments of a user',
-    default: 'igno',
+    default: 'cielo',
   })
   readonly payments: string;
 
   @IsString()
   @ApiProperty({
     type: [String],
-    description: 'The accountType of a user',
+    description: 'The type of a user',
     default: 'Customer',
   })
-  readonly accountType: string;
+  readonly type: string;
 
   @IsString()
   @ApiProperty({

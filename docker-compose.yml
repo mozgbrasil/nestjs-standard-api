@@ -1,5 +1,6 @@
-version: "3.3"
+version: '3.3'
 
+# docker-compose build
 # docker-compose up dev
 # docker-compose up prod
 
@@ -8,37 +9,37 @@ services:
     container_name: nestjs_api_dev
     image: nestjs-api-dev:1.0.0
     build:
-        context: .
-        # target: development
-        dockerfile: ./Dockerfile
+      context: .
+      # target: development
+      dockerfile: ./Dockerfile
     command: npm run start:debug
     ports:
-        - 3000:3000
-        - 9229:9229
-    network_mode: "host"
+      - 3000:3000
+      - 9229:9229
+    network_mode: 'host'
     volumes:
-        - .:/usr/src/app
-        - /usr/src/app/node_modules
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     restart: unless-stopped
   prod:
     container_name: nestjs_api_prod
     image: nestjs-api-prod:1.0.0
     build:
-        context: .
-        # target: production
-        dockerfile: ./Dockerfile
+      context: .
+      # target: production
+      dockerfile: ./Dockerfile
     command: npm run start:prod
     ports:
-        - 3000:3000
-        - 9229:9229
-    network_mode: "host"
+      - 3000:3000
+      - 9229:9229
+    network_mode: 'host'
     volumes:
-        - .:/usr/src/app
-        - /usr/src/app/node_modules
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     restart: unless-stopped
   mongodb:
     image: mongo:latest
-    network_mode: "host"
+    network_mode: 'host'
     restart: unless-stopped
     ports:
       - 27017:27017
@@ -49,68 +50,69 @@ services:
     #  MONGO_INITDB_ROOT_USERNAME: root
     #  MONGO_INITDB_ROOT_PASSWORD: example
     #  MONGO_INITDB_DATABASE: your-database-here
-  # mongo-express:
-  #   image: mongo-express
-  #   network_mode: "host"
-  #   restart: unless-stopped
-  #   # @TODO: Error, Not Work
-  #   ports:
-  #     - 8081:8081
-  #   depends_on:
-  #     - mongodb
-  postgres:
-    image: "postgres:9.6"
-    network_mode: "host"
+  mongo-express:
+    image: mongo-express
+    network_mode: 'host'
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      - 8081:8081
+    depends_on:
+      - mongodb
+    environment:
+      ME_CONFIG_MONGODB_URL: ${ME_CONFIG_MONGODB_URL:-mongodb://localhost:27017/mjv?ssl=false}
+  postgres:
+    image: 'postgres:9.6'
+    network_mode: 'host'
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-hello}
     volumes:
-      - "volume-postgres:/var/lib/postgresql/data"
+      - 'volume-postgres:/var/lib/postgresql/data'
   adminer:
     image: adminer
-    network_mode: "host"
+    network_mode: 'host'
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - '8080:8080'
   pgadmin:
-    image: "dpage/pgadmin4"
-    network_mode: "host"
+    image: 'dpage/pgadmin4'
+    network_mode: 'host'
     restart: unless-stopped
     # @TODO: Error, Not Work
     ports:
-      - "15432:15432"
+      - '15432:15432'
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@gmail.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
     volumes:
-      - "volume-pgadmin:/var/lib/pgadmin"
+      - 'volume-pgadmin:/var/lib/pgadmin'
   redis:
     image: redis
-    network_mode: "host"
+    network_mode: 'host'
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - '6379:6379'
   redisinsight:
     image: redislabs/redisinsight
     restart: unless-stopped
     links:
       - redis:redis
     ports:
-      - "8001:8001"
+      - '8001:8001'
     volumes:
       - redis-data:/db
   rabbitmq:
-    image: "rabbitmq:3.8-management-alpine"
+    image: 'rabbitmq:3.8-management-alpine'
     # network_mode: "host"
     # container_name: nodejs-rabbitmq-rabbitmq
     # hostname: rabbitmq
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      - '15672:15672'
+      - '5672:5672'
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq/mnesia
     environment:

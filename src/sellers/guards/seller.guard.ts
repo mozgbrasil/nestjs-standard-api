@@ -20,7 +20,7 @@ export class SellerGuard implements CanActivate {
 
     const decodeCustomer: AuthenticatedUser = jwt_decode(jwt);
 
-    if (decodeCustomer.accountType === 'Seller') {
+    if (decodeCustomer.type === 'Seller') {
       return true;
     }
 

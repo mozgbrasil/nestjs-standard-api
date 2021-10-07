@@ -31,7 +31,7 @@ export class Seller {
   payments: Payment[];
 
   // @Column({ default: 'Seller' })
-  accountType: string;
+  type: string;
 
   // @CreateDateColumn()
   created_at: Date;

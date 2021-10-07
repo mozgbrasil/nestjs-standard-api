@@ -63,8 +63,8 @@ export class AuthController {
   // @UseGuards(LocalAuthGuard)
   @UseGuards(AuthGuard('customerStrategy'))
   // @ApiBody({ type: CreateUserDto })
-  @Post('customer')
-  async loginCustomer(@Body() createUserDto: CreateUserDto, @Request() req) {
+  @Post('user')
+  async loginUser(@Body() createUserDto: CreateUserDto, @Request() req) {
     return this.authService.login(req.user);
   }
 

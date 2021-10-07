@@ -23,27 +23,27 @@ export class UsersService {
         username: 'john',
         password: 'changeme',
         email: 'johndoe@gmail.com',
+        type: 'Customer',
         payments: 'payments',
         created_at: '2021-10-06',
-        accountType: 'Customer',
       },
       {
         userId: 2,
         username: 'chris',
         password: 'secret',
         email: 'johndoe@gmail.com',
+        type: 'Customer',
         payments: 'payments',
         created_at: '2021-10-06',
-        accountType: 'Customer',
       },
       {
         userId: 3,
         username: 'maria',
         password: 'guess',
         email: 'johndoe@gmail.com',
+        type: 'Customer',
         payments: 'payments',
         created_at: '2021-10-06',
-        accountType: 'Customer',
       },
     ];
   }
@@ -79,11 +79,11 @@ export class UsersService {
   //
 
   async createMongoRecord(createUserDto: CreateUserDto): Promise<User> {
-    const saved = await new this.userMyModel(createUserDto).save();
-    if (!saved) {
+    const result = await new this.userMyModel(createUserDto).save();
+    if (!result) {
       throw new RpcException('Problem to create a record');
     }
-    return saved;
+    return result;
   }
 
   async findMongoRecord() {

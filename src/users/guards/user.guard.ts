@@ -22,7 +22,7 @@ export class CustomerGuard implements CanActivate {
 
     console.log('decodeCustomer:', decodeCustomer);
 
-    if (decodeCustomer.accountType === 'Customer') {
+    if (decodeCustomer.type === 'Customer') {
       return true;
     }
 

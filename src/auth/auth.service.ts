@@ -83,15 +83,4 @@ export class AuthService {
 
     return obj;
   }
-
-  async login_b2b(user: any) {
-    const payload = {
-      email: user.email,
-      id: user.id,
-      accountType: user.accountType,
-    };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }
 }

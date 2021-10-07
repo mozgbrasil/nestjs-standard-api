@@ -6,13 +6,13 @@ export class CreateSellerDto {
   @ApiProperty({
     type: [String],
     description: 'The username of a user',
-    default: 'john',
+    default: 'ACME Corporation',
   })
   readonly username: string;
 
   @ApiProperty({
     description: 'The email of a user',
-    example: 'johndoe@gmail.com',
+    example: 'acme@gmail.com',
   })
   readonly email: string;
 
@@ -20,7 +20,7 @@ export class CreateSellerDto {
   @ApiProperty({
     type: [String],
     description: 'The password of a user',
-    default: 'changeme',
+    default: '123456a',
   })
   readonly password: string;
 
@@ -28,17 +28,17 @@ export class CreateSellerDto {
   @ApiProperty({
     type: [String],
     description: 'The payments of a user',
-    default: 'igno',
+    default: 'cielo',
   })
   readonly payments: string;
 
   @IsString()
   @ApiProperty({
     type: [String],
-    description: 'The accountType of a user',
+    description: 'The type of a user',
     default: 'Seller',
   })
-  readonly accountType: string;
+  readonly type: string;
 
   @IsString()
   @ApiProperty({

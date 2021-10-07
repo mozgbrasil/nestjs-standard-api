@@ -25,7 +25,7 @@ export class User {
   payments: Payment[];
 
   // @Column({ default: 'Customer' })
-  accountType: string;
+  type: string;
 
   // @CreateDateColumn()
   created_at: Date;

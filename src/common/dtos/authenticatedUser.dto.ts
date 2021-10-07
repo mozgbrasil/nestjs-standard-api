@@ -3,7 +3,7 @@ export class AuthenticatedUser {
   username: string;
   email: string;
   password: string;
+  type: string;
   payments: string;
-  accountType: string;
   created_at: string;
 }

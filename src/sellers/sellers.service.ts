@@ -56,22 +56,6 @@ export class SellersService {
     return results;
   }
 
-  async createSeller({ username, email, password }: CreateSellerDto) {
-    const userAlreadyExists = await this.sellerMyModel.findOne({
-      where: { email: email },
-    });
-
-    if (userAlreadyExists) {
-      // throw new ConflictException('This email is already in use');
-    }
-
-    const seller = new Seller();
-
-    const wallet = await this.createWallet(username);
-
-    // await this.sellerMyModel(createSellerDto).save();
-  }
-
   async findSellerPayments(id: string) {
     // const seller = await this.sellerMyModel.findOne(id);
     // const payments = await this.paymentMyModel.find({

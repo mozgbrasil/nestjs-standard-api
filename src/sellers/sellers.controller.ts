@@ -74,11 +74,6 @@ export class SellersController {
     return this.sellersService.findSellerById(auth._id);
   }
 
-  @Post('create 🛑️')
-  createSeller(@Body() createSellerDto: CreateSellerDto) {
-    return this.sellersService.createSeller(createSellerDto);
-  }
-
   @UseGuards(JwtAuthGuard, SellerGuard)
   @ApiBearerAuth('JWT-auth')
   @Get('payments 🛑️')

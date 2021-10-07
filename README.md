@@ -228,14 +228,14 @@ Na função de envio do pagamento à cielo, não vi nenhum ponto do código que 
 
 vi muita lógica de negócio dentro do controller, o que fere o principio da responsabilidade única do S.O.L.I.D. O controller deve lidar apenas com os aspectos da requisição ou evento que chegam, enquanto o processamento de negócio desses dados devem ser feitos pelo service.
 
-ℹ️ @TODO:
+👕️ feito
 
 2. Códigos desnecessários
 
 O microserviço deve fazer apenas 2 coisas: ouvir as requisições que chegam na fila e salvar essas requisições no banco. ( e pelo que vi, ele já está fazendo isso )
 No controller do microservice existe uma quantidade grande de código desnecessário, ferindo o clean code. elimine os códigos desnecessários do microserviço, deixando somente o que é necessário para que ele cumpra seus objetivos e nada a mais.
 
-ℹ️ @TODO:
+👕️ feito
 
 RESUMO:
 
