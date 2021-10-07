@@ -19,7 +19,7 @@ import { SellerSchema } from '../sellers/interfaces/seller.schema';
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '600s' },
+      signOptions: { expiresIn: '6000s' },
     }),
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchema },

@@ -11,13 +11,6 @@ import { ClientProxy } from '@nestjs/microservices';
 import { Message } from '../../message.event';
 import RabbitmqServer from '../../common/rabbitmq-server';
 
-async function rabbitmqServer(request) {
-  const server = new RabbitmqServer(process.env.AMQP_URL);
-  await server.start();
-  await server.publishInQueue(process.env.AMQP_QUEUE, JSON.stringify(request));
-  // await server.publishInExchange('amq.direct','rota2', JSON.stringify(request.body));
-  return request;
-}
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   constructor(
@@ -44,7 +37,8 @@ export class LoggingInterceptor implements NestInterceptor {
       pattern: 'create-rmq-channel',
       data: message,
     };
-    rabbitmqServer(payload);
+
+    this.rabbitmqServer(payload);
 
     //
     // @TODO:
@@ -62,5 +56,14 @@ export class LoggingInterceptor implements NestInterceptor {
     );
 
     return ret;
+  }
+
+  async rabbitmqServer(payload) {
+    const server = new RabbitmqServer(process.env.AMQP_URL);
+    await server.start();
+    await server.publishInQueue(
+      process.env.AMQP_QUEUE,
+      JSON.stringify(payload),
+    );
   }
 }

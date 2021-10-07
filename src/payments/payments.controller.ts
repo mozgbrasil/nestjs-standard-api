@@ -6,46 +6,45 @@ import {
   Patch,
   Param,
   Delete,
+  Inject,
+  UseGuards,
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ClientProxy } from '@nestjs/microservices';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CustomerGuard } from 'src/users/guards/user.guard';
+import { DecodeJwt } from 'src/common/decorators/decode-jwt.decortator';
 
 @ApiTags('payments')
 @Controller('payments')
 export class PaymentsController {
-  constructor(private readonly paymentsService: PaymentsService) {}
+  constructor(
+    private readonly paymentsService: PaymentsService,
+    @Inject('RABBIT_PUBLISH_CHANNEL')
+    private readonly publishChannel: ClientProxy,
+  ) {}
 
-  // @Post()
-  // create(@Body() createPaymentDto: CreatePaymentDto) {
-  //   return this.paymentsService.create(createPaymentDto);
-  // }
-
-  // @Get()
-  // findAll() {
-  //   return this.paymentsService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.paymentsService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
-  //   return this.paymentsService.update(+id, updatePaymentDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.paymentsService.remove(+id);
-  // }
-
-  //
-
-  @Post('cielo')
-  cieloTransaction(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentsService.cieloTransaction(createPaymentDto);
+  @UseGuards(JwtAuthGuard, CustomerGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Post()
+  async create(
+    @Body() createPaymentDto: CreatePaymentDto,
+    @DecodeJwt() auth: any,
+  ) {
+    return await this.paymentsService.create(createPaymentDto, auth._id);
   }
+
+  // @ApiBearerAuth('JWT-auth')
+  // @Patch('validation/:id')
+  // async validatePayment(@Param('id') id: string) {
+  //   return await this.paymentsService.validatePayment(id);
+  // }
+
+  // @Post('cielo')
+  // cieloTransaction(@Body() createPaymentDto: CreatePaymentDto) {
+  //   return this.paymentsService.cieloTransaction(createPaymentDto);
+  // }
 }

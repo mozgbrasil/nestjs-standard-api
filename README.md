@@ -241,23 +241,35 @@ RESUMO:
 
 - A api tem uma função de envio de pagamento à cielo mas ainda não tem essa funcionalidade implementada para o usuário criar o pagamento
 
+👕️ feito
+
 - nenhum dos casos de uso contidos no diagrama de casos de uso do teste está implementado
 
 - nenhuma autenticação foi implementada
 
+👕️ feito
+
 - falta docker-compose para testar o projeto
+
+👕️ feito
 
 - os logs aparentemente estão sendo salvos, mas somente os que são recebidos pela api. falta logar as requisições que são feitas pela pópria api (cielo)
 
+👕️ feito
+
 - varias quebras dos principios S.O.L.I.D (principalmente o primeiro e o quinto) e do Clean Code. (lógicas de serviço dentro do controller no microserviço, códigos altamente acoplados, definição de funções dentro de classes, método construtor não utilizado)
 
+ℹ️ @TODO:
+
 - o microserviço está praticamente pronto, agora falta somente os ajustes citados.
+
+ℹ️ @TODO:
 
 INSTRUÇÕES
 
 - Ler um pouco mais sobre S.O.L.I.D e clean code (prioridade).
 
-👕️ Venho vendo videos que abordam essas práticas para eu adotar ela nos projetos
+ℹ️ @TODO: 👕️ Venho vendo videos que abordam essas práticas para eu adotar ela nos projetos
 
 - mover a lógica do controller para dentro do service no microserviço e eliminar códigos desnecessários
 

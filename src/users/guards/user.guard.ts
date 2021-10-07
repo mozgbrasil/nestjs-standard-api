@@ -20,8 +20,6 @@ export class CustomerGuard implements CanActivate {
 
     const decodeCustomer: AuthenticatedUser = jwt_decode(jwt);
 
-    console.log('decodeCustomer:', decodeCustomer);
-
     if (decodeCustomer.type === 'Customer') {
       return true;
     }

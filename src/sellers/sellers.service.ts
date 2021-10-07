@@ -17,28 +17,6 @@ export class SellersService {
     @InjectModel('Payment') private readonly paymentMyModel: Model<Payment>,
   ) {}
 
-  create(createSellerDto: CreateSellerDto) {
-    return 'This action adds a new seller';
-  }
-
-  findAll() {
-    return `This action returns all seller`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} seller`;
-  }
-
-  update(id: number, updateSellerDto: UpdateSellerDto) {
-    return `This action updates a #${id} seller`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} seller`;
-  }
-
-  //
-
   async createMongoRecord(createSellerDto: CreateSellerDto): Promise<Seller> {
     const result = await new this.sellerMyModel(createSellerDto).save();
 
@@ -57,14 +35,12 @@ export class SellersService {
   }
 
   async findSellerPayments(id: string) {
-    // const seller = await this.sellerMyModel.findOne(id);
-    // const payments = await this.paymentMyModel.find({
-    //   where: { seller: seller },
-    // });
-    // const paymentsReturn = payments.map(
-    //   ({ seller, customer, debitCard, ...paymentsReturn }) => paymentsReturn,
-    // );
-    // return paymentsReturn;
+    const seller = await this.sellerMyModel.findOne({ _id: id });
+    const payments = await this.paymentMyModel.find({
+      where: { seller: seller },
+    });
+
+    return payments;
   }
 
   async findSellerById(id: string) {
@@ -76,8 +52,13 @@ export class SellersService {
   }
 
   async findSellerWallet(id: string) {
-    // const seller = await this.sellerMyModel.findOne(id);
-    // return seller.wallet;
+    const seller = await this.sellerMyModel.findOne({ _id: id });
+    return seller.wallet;
+  }
+
+  async findSellerTransaction(id: string) {
+    const seller = await this.sellerMyModel.findOne({ _id: id });
+    return seller.wallet;
   }
 
   async createWallet(sellerName: string) {

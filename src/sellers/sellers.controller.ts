@@ -30,33 +30,6 @@ import { AuthenticatedUser } from '../common/dtos/authenticatedUser.dto';
 export class SellersController {
   constructor(private readonly sellersService: SellersService) {}
 
-  // @Post()
-  // create(@Body() createSellerDto: CreateSellerDto) {
-  //   return this.sellersService.create(createSellerDto);
-  // }
-
-  // @Get()
-  // findAll() {
-  //   return this.sellersService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.sellersService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateSellerDto: UpdateSellerDto) {
-  //   return this.sellersService.update(+id, updateSellerDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.sellersService.remove(+id);
-  // }
-
-  //
-
   @Post('mongo-create')
   createMongoRecord(@Body() createSellerDto: CreateSellerDto) {
     return this.sellersService.createMongoRecord(createSellerDto);
@@ -76,14 +49,21 @@ export class SellersController {
 
   @UseGuards(JwtAuthGuard, SellerGuard)
   @ApiBearerAuth('JWT-auth')
-  @Get('payments 🛑️')
+  @Get('find-payments')
   findSellerPayments(@DecodeJwt() auth: AuthenticatedUser) {
     return this.sellersService.findSellerPayments(auth._id);
   }
 
   @UseGuards(JwtAuthGuard, SellerGuard)
   @ApiBearerAuth('JWT-auth')
-  @Get('wallet 🛑️')
+  @Get('find-transaction')
+  findTransaction(@DecodeJwt() auth: AuthenticatedUser) {
+    return this.sellersService.findSellerTransaction(auth._id);
+  }
+
+  @UseGuards(JwtAuthGuard, SellerGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Get('find-wallet 🛑️')
   findSellerWallet(@DecodeJwt() auth: AuthenticatedUser) {
     return this.sellersService.findSellerWallet(auth._id);
   }

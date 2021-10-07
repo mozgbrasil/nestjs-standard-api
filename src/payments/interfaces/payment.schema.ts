@@ -1,13 +1,13 @@
 import * as mongoose from 'mongoose';
 
 const jsonSchema = {
-  orderId: { type: String, required: false },
-  amount: { type: String, required: false },
-  status: { type: String, required: false },
-  customer: { type: String, required: false },
-  seller: { type: String, required: false },
-  debitCard: { type: String, required: false },
-  created_at: { type: String, required: false },
+  orderId: { type: String, required: true },
+  amount: { type: String, required: true },
+  status: { type: String, required: true },
+  customer: { type: String, required: true },
+  seller: { type: String, required: true },
+  debitCard: { type: Object, required: true },
+  created_at: { type: String, required: true },
 };
 
 export const PaymentSchema = new mongoose.Schema(jsonSchema);

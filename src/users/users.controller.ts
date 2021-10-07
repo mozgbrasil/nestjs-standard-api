@@ -69,15 +69,13 @@ export class UsersController {
   @ApiBearerAuth('JWT-auth')
   @Get('/profile')
   findCustomerById(@DecodeJwt() auth: AuthenticatedUser) {
-    var id = auth._id;
-    return this.usersService.findCustomerById(id);
+    return this.usersService.findCustomerById(auth._id);
   }
 
   @UseGuards(JwtAuthGuard, CustomerGuard)
   @ApiBearerAuth('JWT-auth')
-  @Get('/payments 🛑️')
+  @Get('/find-payments')
   findCustomerPayments(@DecodeJwt() auth: AuthenticatedUser) {
-    var id = auth._id;
-    return this.usersService.findCustomerPayments(id);
+    return this.usersService.findCustomerPayments(auth._id);
   }
 }
