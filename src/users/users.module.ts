@@ -5,6 +5,11 @@ import { AuthModule } from '../auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './interfaces/user.schema';
 import { PaymentSchema } from '../payments/interfaces/payment.schema';
+import { PaymentsService } from 'src/payments/payments.service';
+import { WalletSchema } from 'src/wallets/interfaces/wallet.schema';
+import { TransactionSchema } from 'src/transactions/interfaces/transaction.schema';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { SellerSchema } from 'src/sellers/interfaces/seller.schema';
 
 @Module({
   imports: [
@@ -12,11 +17,27 @@ import { PaymentSchema } from '../payments/interfaces/payment.schema';
     forwardRef(() => AuthModule),
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchema },
+      { name: 'Seller', schema: SellerSchema },
       { name: 'Payment', schema: PaymentSchema },
+      { name: 'Wallet', schema: WalletSchema },
+      { name: 'Transaction', schema: TransactionSchema },
+    ]),
+    ClientsModule.register([
+      {
+        name: 'RABBIT_PUBLISH_CHANNEL',
+        transport: Transport.RMQ,
+        options: {
+          urls: [process.env.AMQP_URL],
+          queue: process.env.AMQP_QUEUE,
+          // queueOptions: {
+          //   durable: false,
+          // },
+        },
+      },
     ]),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, PaymentsService],
   exports: [UsersService],
 })
 export class UsersModule {}

@@ -13,6 +13,8 @@ import {
   EnumCardType,
   DebitCardSimpleTransactionRequestModel,
   EnumBrands,
+  ConsultTransactionMerchantOrderIdRequestModel,
+  ConsultTransactionPaymentIdRequestModel,
 } from 'cielo';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { Payment } from './entities/payment.entity';
@@ -35,11 +37,14 @@ export class PaymentsService {
   @InjectModel('User') private readonly userMyModel: Model<User>;
   @InjectModel('Seller') private readonly sellerMyModel: Model<Seller>;
   @InjectModel('Payment') private readonly paymentMyModel: Model<Payment>;
+  @InjectModel('Wallet') private readonly walletMyModel: Model<Wallet>;
+  @InjectModel('Transaction')
+  private readonly transactionMyModel: Model<Transaction>;
 
   @Inject('RABBIT_PUBLISH_CHANNEL')
   private readonly publishChannel: ClientProxy;
 
-  async create(
+  async createPayment(
     { amount, debitCard, sellerId }: CreatePaymentDto,
     customerId: string,
   ) {
@@ -60,8 +65,6 @@ export class PaymentsService {
       debitCard,
       created_at: new Date().toISOString(),
     });
-    // payment = await this.paymentMyModel.save(payment); // pg
-    payment = await new this.paymentMyModel(payment).save(); // mg
 
     return await this.sendRequestCielo(payment);
   }
@@ -100,7 +103,7 @@ export class PaymentsService {
     const transaction = await cielo.debitCard
       .createSimpleTransaction(debitCardTransactionParams)
       .then(async (res) => {
-        console.log('res: ', res);
+        // console.log('res: ', res);
 
         //
         var timestamp = new Date().getTime();
@@ -133,95 +136,128 @@ export class PaymentsService {
         return message;
       });
 
+    // payment = await this.paymentMyModel.save(payment); // pg
+    payment = await new this.paymentMyModel(payment).save(); // mg
+
     return transaction;
   }
 
-  // async validatePayment(id: string) {
-  //   const response = await axios
-  //     .get(`${cieloURLGet}${id}`, cieloHeaderConfig)
-  //     .then(function (response) {
-  //       return response;
-  //     })
-  //     .catch(function (error) {
-  //       throw new HttpException('Payment Not Found', error.response.status);
-  //     });
+  async validatePayment(id: string) {
+    const cieloParams: CieloConstructor = {
+      merchantId: process.env.MERCHANTID,
+      merchantKey: process.env.MERCHANTKEY,
+      requestId: 'xxxxxxx', // Opcional - Identificação do Servidor na Cielo
+      sandbox: true, // Opcional - Ambiente de Testes
+      debug: true, // Opcional - Exibe os dados enviados na requisição para a Cielo
+    };
 
-  //   const httpLogDTO: HttpLogDTO = {
-  //     url: cieloURLPost,
-  //     method: 'GET',
-  //     headers: cieloHeaderConfig,
-  //     body: {},
-  //   };
+    const cielo = new Cielo(cieloParams);
 
-  //   this.publishChannel.sendToQueue(
-  //     rabbitMqQueue,
-  //     Buffer.from(JSON.stringify(httpLogDTO)),
-  //     {
-  //       persistent: true,
-  //     },
-  //   );
+    const consultTransactionMerchantOrderI: ConsultTransactionMerchantOrderIdRequestModel =
+      {
+        merchantOrderId: id,
+      };
 
-  //   const orderId = response.data.MerchantOrderId;
+    const consultTransactionPaymentId: ConsultTransactionPaymentIdRequestModel =
+      {
+        paymentId: id,
+      };
 
-  //   console.log(orderId);
+    const response: any = await cielo.consult
+      // .merchantOrderId(consultTransactionMerchantOrderI)
+      .paymentId(consultTransactionPaymentId)
+      .then((res) => {
+        // console.log('res: ', res);
+        return res;
+      })
+      .catch((err) => {
+        console.log('err: ', err);
+      });
 
-  //   if (response.data.Payment.Status === 2) {
-  //     return await this.approvePayment(orderId);
-  //   }
-  //   return await this.refusePayment(orderId);
-  // }
+    //
+    var timestamp = new Date().getTime();
+    var message = {
+      url: 'req.originalUrl',
+      body: response,
+      method: 'POST',
+      headers: 'req.headers',
+      timestamp: timestamp,
+    };
 
-  // async approvePayment(id: string) {
-  //   /**Mudando o status do pagamento*/
-  //   console.log(id);
-  //   let payment = await this.paymentRepository.findOne(id);
-  //   payment.status = 'Approved';
+    var payload = {
+      pattern: 'create-rmq-channel',
+      data: message,
+    };
+    const server = new RabbitmqServer(process.env.AMQP_URL);
+    await server.start();
+    await server.publishInQueue(
+      process.env.AMQP_QUEUE,
+      JSON.stringify(payload),
+    );
 
-  //   payment = await this.paymentRepository.save(payment);
+    //
 
-  //   /**Adicionando valor a carteira*/
-  //   const sellerWallet = payment.seller.wallet;
-  //   sellerWallet.amount += payment.amount;
+    const orderId = response.merchantOrderId;
+    // if (response.payment.status === 2) {
+    return await this.approvePayment(orderId);
+    // }
+    return await this.refusePayment(orderId);
+  }
 
-  //   await this.walletRepository.save(sellerWallet);
+  async approvePayment(id: string) {
+    // change status
+    let payment = await this.paymentMyModel.findOne({ orderId: id });
+    payment.status = 'Approved';
 
-  //   /**Salvando a transação*/
+    payment = await new this.paymentMyModel(payment).save();
 
-  //   await this.createTransaction(payment.amount, payment.orderId, sellerWallet);
+    // insert record wallet
 
-  //   const { customer, seller, debitCard, ...paymentReturn } = payment;
+    // const sellerWallet = payment.seller.wallet;
+    // sellerWallet.amount += payment.amount;
 
-  //   console.log(payment);
+    var obj = payment.toJSON();
 
-  //   return paymentReturn;
-  // }
+    const sellerWallet: any = {
+      sellerId: payment.amount,
+      amount: payment.amount,
+      transaction: 123,
+    };
 
-  // async refusePayment(id: string) {
-  //   console.log(id);
-  //   let payment = await this.paymentRepository.findOne(id);
-  //   payment.status = 'Refused';
+    await new this.walletMyModel(sellerWallet).save();
 
-  //   payment = await this.paymentRepository.save(payment);
+    // insert record transaction
 
-  //   const { customer, seller, debitCard, ...paymentReturn } = payment;
+    await this.createTransaction(payment.amount, payment.orderId, sellerWallet);
 
-  //   return paymentReturn;
-  // }
+    return payment;
+  }
 
-  // async createTransaction(amount: number, orderId: string, wallet: Wallet) {
-  //   const transaction = new Transaction();
+  async refusePayment(id: string) {
+    console.log('@@@ refusePayment', id);
+    let payment = await this.paymentMyModel.findOne({ orderId: id });
 
-  //   const id = uuid.v4();
+    payment.status = 'Refused';
 
-  //   Object.assign(transaction, {
-  //     id,
-  //     amount,
-  //     orderId,
-  //     wallet,
-  //   });
+    payment = await new this.paymentMyModel(payment).save();
 
-  //   this.transactionRepository.save(transaction);
-  // }
+    return payment;
+  }
 
-  //
+  async createTransaction(amount: number, orderId: string, wallet: Wallet) {
+    console.log('@@@ createTransaction');
+    const transaction = new Transaction();
+
+    const walletId = 'uuid.v4()';
+
+    const id = uuid.v4();
+
+    Object.assign(transaction, {
+      amount,
+      orderId,
+      walletId,
+    });
+
+    await new this.transactionMyModel(transaction).save();
+  }
 }

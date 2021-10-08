@@ -24,6 +24,7 @@ $ nest g resource users
 $ nest g resource sellers
 $ nest g resource payments
 $ nest g resource wallets
+$ nest g resource transactions
 
 ```
 
@@ -201,7 +202,7 @@ A função cieloDebitCard(), com as devidas considerações do item 3, parece ok
 
 Os DTOs das requisições não estão documentados no swagger.
 
-ℹ️ @TODO:
+👕️ feito
 
 6. Multiplas conexões com o RabbitMQ
 
@@ -259,17 +260,17 @@ RESUMO:
 
 - varias quebras dos principios S.O.L.I.D (principalmente o primeiro e o quinto) e do Clean Code. (lógicas de serviço dentro do controller no microserviço, códigos altamente acoplados, definição de funções dentro de classes, método construtor não utilizado)
 
-ℹ️ @TODO:
+👕️ feito
 
 - o microserviço está praticamente pronto, agora falta somente os ajustes citados.
 
-ℹ️ @TODO:
+👕️ feito
 
 INSTRUÇÕES
 
 - Ler um pouco mais sobre S.O.L.I.D e clean code (prioridade).
 
-ℹ️ @TODO: 👕️ Venho vendo videos que abordam essas práticas para eu adotar ela nos projetos
+👕️ ℹ️ @TODO: Vendo videos que abordam essas práticas
 
 - mover a lógica do controller para dentro do service no microserviço e eliminar códigos desnecessários
 
@@ -286,6 +287,17 @@ INSTRUÇÕES
 - implemente o envio do log da requisição da cielo para a fila
 
 ℹ️ @TODO:
+
+### Passos Test Swagger
+
+- Create User
+- Create Seller
+- Auth User
+  |-- Authorize
+- User Payment
+  |-- > authenticationUrl
+- Check Payment
+-
 
 ## Contribuição
 

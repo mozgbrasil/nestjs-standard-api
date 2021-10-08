@@ -6,6 +6,8 @@ import { PaymentsController } from './payments.controller';
 import { UserSchema } from '../users/interfaces/user.schema';
 import { SellerSchema } from '../sellers/interfaces/seller.schema';
 import { PaymentSchema } from './interfaces/payment.schema';
+import { WalletSchema } from 'src/wallets/interfaces/wallet.schema';
+import { TransactionSchema } from 'src/transactions/interfaces/transaction.schema';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { PaymentSchema } from './interfaces/payment.schema';
       { name: 'User', schema: UserSchema },
       { name: 'Seller', schema: SellerSchema },
       { name: 'Payment', schema: PaymentSchema },
+      { name: 'Wallet', schema: WalletSchema },
+      { name: 'Transaction', schema: TransactionSchema },
     ]),
     ClientsModule.register([
       {

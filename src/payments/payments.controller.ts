@@ -27,24 +27,19 @@ export class PaymentsController {
     private readonly publishChannel: ClientProxy,
   ) {}
 
-  @UseGuards(JwtAuthGuard, CustomerGuard)
-  @ApiBearerAuth('JWT-auth')
-  @Post()
-  async create(
-    @Body() createPaymentDto: CreatePaymentDto,
-    @DecodeJwt() auth: any,
-  ) {
-    return await this.paymentsService.create(createPaymentDto, auth._id);
-  }
+  // @UseGuards(JwtAuthGuard, CustomerGuard)
+  // @ApiBearerAuth('JWT-auth')
+  // @Post()
+  // async createPayment(
+  //   @Body() createPaymentDto: CreatePaymentDto,
+  //   @DecodeJwt() auth: any,
+  // ) {
+  //   return await this.paymentsService.createPayment(createPaymentDto, auth._id);
+  // }
 
   // @ApiBearerAuth('JWT-auth')
-  // @Patch('validation/:id')
-  // async validatePayment(@Param('id') id: string) {
-  //   return await this.paymentsService.validatePayment(id);
-  // }
-
-  // @Post('cielo')
-  // cieloTransaction(@Body() createPaymentDto: CreatePaymentDto) {
-  //   return this.paymentsService.cieloTransaction(createPaymentDto);
-  // }
+  @Patch('check/:id')
+  async validatePayment(@Param('id') id: string) {
+    return await this.paymentsService.validatePayment(id);
+  }
 }

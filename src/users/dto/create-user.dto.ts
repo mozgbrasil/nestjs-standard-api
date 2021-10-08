@@ -27,14 +27,6 @@ export class CreateUserDto {
   @IsString()
   @ApiProperty({
     type: [String],
-    description: 'The payments of a user',
-    default: 'cielo',
-  })
-  readonly payments: string;
-
-  @IsString()
-  @ApiProperty({
-    type: [String],
     description: 'The type of a user',
     default: 'Customer',
   })
@@ -44,7 +36,7 @@ export class CreateUserDto {
   @ApiProperty({
     type: [String],
     description: 'The created_at of a user',
-    default: '2021-10-06',
+    default: '2021-10-07T19:55:53.778Z',
   })
   readonly created_at: string;
 }

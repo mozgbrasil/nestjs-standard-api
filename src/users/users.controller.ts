@@ -22,38 +22,16 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CustomerGuard } from './guards/user.guard';
 import { DecodeJwt } from '../common/decorators/decode-jwt.decortator';
 import { AuthenticatedUser } from '../common/dtos/authenticatedUser.dto';
+import { CreatePaymentDto } from 'src/payments/dto/create-payment.dto';
+import { PaymentsService } from 'src/payments/payments.service';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
-
-  // @Post()
-  // create(@Body() createUserDto: CreateUserDto) {
-  //   return this.usersService.create(createUserDto);
-  // }
-
-  // @Get()
-  // findAll() {
-  //   return this.usersService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.usersService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.usersService.update(+id, updateUserDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.usersService.remove(+id);
-  // }
-
-  //
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly paymentsService: PaymentsService,
+  ) {}
 
   @Post('mongo-create')
   createMongoRecord(@Body() createUserDto: CreateUserDto) {
@@ -70,6 +48,16 @@ export class UsersController {
   @Get('/profile')
   findCustomerById(@DecodeJwt() auth: AuthenticatedUser) {
     return this.usersService.findCustomerById(auth._id);
+  }
+
+  @UseGuards(JwtAuthGuard, CustomerGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Post('/payment')
+  async createPayment(
+    @Body() createPaymentDto: CreatePaymentDto,
+    @DecodeJwt() auth: any,
+  ) {
+    return await this.paymentsService.createPayment(createPaymentDto, auth._id);
   }
 
   @UseGuards(JwtAuthGuard, CustomerGuard)

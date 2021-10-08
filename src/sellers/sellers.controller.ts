@@ -63,7 +63,7 @@ export class SellersController {
 
   @UseGuards(JwtAuthGuard, SellerGuard)
   @ApiBearerAuth('JWT-auth')
-  @Get('find-wallet 🛑️')
+  @Get('find-wallet')
   findSellerWallet(@DecodeJwt() auth: AuthenticatedUser) {
     return this.sellersService.findSellerWallet(auth._id);
   }

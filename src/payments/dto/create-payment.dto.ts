@@ -15,8 +15,8 @@ export class CreatePaymentDto {
   amount: number;
 
   @ApiProperty({
-    description: "Seller's ID",
-    example: '615f32971b3801af8afcece9',
+    description: 'Seller ID',
+    example: '61605ee7d782dd55d81ca4ac',
   })
   sellerId: string;
 

@@ -1572,7 +1572,7 @@ at-least-node@^1.0.0:
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
-axios@0.22.0:
+axios@0.22.0, axios@^0.22.0:
   version "0.22.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.22.0.tgz#bf702c41fb50fbca4539589d839a077117b79b25"
   integrity sha512-Z0U3uhqQeg1oNcihswf4ZD57O3NrR1+ZXhxaROaWpDmsDTx7T2HNBV2ulBtie2hwJptu8UvgnJoK+BIqdzh/1w==
@@ -2225,11 +2225,6 @@ detect-libc@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
   integrity sha1-+hN8S9aY7fVc1c0CrFWfkaTEups=
-
-detect-newline@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-3.1.0.tgz#576f5dfc63ae1a192ff192d8ad3af6308991b651"
-  integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 dicer@0.2.5:
   version "0.2.5"
@@ -3363,13 +3358,6 @@ jest-diff@^27.0.0, jest-diff@^27.2.4:
     jest-get-type "^27.0.6"
     pretty-format "^27.2.4"
 
-jest-docblock@^27.0.6:
-  version "27.0.6"
-  resolved "https://registry.yarnpkg.com/jest-docblock/-/jest-docblock-27.0.6.tgz#cc78266acf7fe693ca462cbbda0ea4e639e4e5f3"
-  integrity sha512-Fid6dPcjwepTFraz0YxIMCi7dejjJ/KL9FBjPYhBp4Sv1Y9PdhImlKZqYU555BlN4TQKaTc+F2Av1z+anVyGkA==
-  dependencies:
-    detect-newline "^3.0.0"
-
 jest-each@^27.2.4:
   version "27.2.4"
   resolved "https://registry.yarnpkg.com/jest-each/-/jest-each-27.2.4.tgz#b4f280aafd63129ba82e345f0e74c5a10200aeef"
@@ -3455,14 +3443,6 @@ jest-jasmine2@^27.2.4:
     pretty-format "^27.2.4"
     throat "^6.0.1"
 
-jest-leak-detector@^27.2.4:
-  version "27.2.4"
-  resolved "https://registry.yarnpkg.com/jest-leak-detector/-/jest-leak-detector-27.2.4.tgz#9bb7eab26a73bb280e9298be8d80f389288ec8f1"
-  integrity sha512-SrcHWbe0EHg/bw2uBjVoHacTo5xosl068x2Q0aWsjr2yYuW2XwqrSkZV4lurUop0jhv1709ymG4or+8E4sH27Q==
-  dependencies:
-    jest-get-type "^27.0.6"
-    pretty-format "^27.2.4"
-
 jest-matcher-utils@^27.2.4:
   version "27.2.4"
   resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-27.2.4.tgz#008fff018151415ad1b6cfc083fd70fe1e012525"
@@ -3535,6 +3515,29 @@ jest-runner@^27.2.4:
   version "27.2.4"
   resolved "https://registry.yarnpkg.com/jest-runner/-/jest-runner-27.2.4.tgz#d816f4cb4af04f3cba703afcf5a35a335b77cad4"
   integrity sha512-hIo5PPuNUyVDidZS8EetntuuJbQ+4IHWxmHgYZz9FIDbG2wcZjrP6b52uMDjAEQiHAn8yn8ynNe+TL8UuGFYKg==
+  dependencies:
+    "@jest/console" "^27.2.4"
+    "@jest/environment" "^27.2.4"
+    "@jest/test-result" "^27.2.4"
+    "@jest/transform" "^27.2.4"
+    "@jest/types" "^27.2.4"
+    "@types/node" "*"
+    chalk "^4.0.0"
+    emittery "^0.8.1"
+    exit "^0.1.2"
+    graceful-fs "^4.2.4"
+    jest-docblock "^27.0.6"
+    jest-environment-jsdom "^27.2.4"
+    jest-environment-node "^27.2.4"
+    jest-haste-map "^27.2.4"
+    jest-leak-detector "^27.2.4"
+    jest-message-util "^27.2.4"
+    jest-resolve "^27.2.4"
+    jest-runtime "^27.2.4"
+    jest-util "^27.2.4"
+    jest-worker "^27.2.4"
+    source-map-support "^0.5.6"
+    throat "^6.0.1"
 
 jest-runtime@^27.2.4:
   version "27.2.4"
@@ -4418,6 +4421,8 @@ parent-module@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-1.0.1.tgz#691d2709e78c79fae3a156622452d00762caaaa2"
   integrity sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==
+  dependencies:
+    callsites "^3.0.0"
 
 parse-json@^5.0.0:
   version "5.2.0"
@@ -4997,7 +5002,7 @@ source-list-map@^2.0.1:
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-2.0.1.tgz#3993bd873bfc48479cca9ea3a547835c7c154b34"
   integrity sha512-qnQ7gVMxGNxsiL4lEuJwe/To8UnK7fAnmbGEEH8RpLouuKbeEm0lhbQVFIrNSuB+G7tVrAlVsZgETT5nljf+Iw==
 
-source-map-support@0.5.20, source-map-support@^0.5.6, source-map-support@~0.5.20:
+source-map-support@0.5.20, source-map-support@~0.5.20:
   version "0.5.20"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.20.tgz#12166089f8f5e5e8c56926b377633392dd2cb6c9"
   integrity sha512-n1lZZ8Ve4ksRqizaBQgxXDgKwttHDhyfQjA6YZZn8+AroHbsIz+JjwxQDxbp+7y5OYCI8t1Yk7etjD9CRd2hIw==

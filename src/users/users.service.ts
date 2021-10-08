@@ -25,7 +25,7 @@ export class UsersService {
         email: 'johndoe@gmail.com',
         type: 'Customer',
         payments: 'payments',
-        created_at: '2021-10-06',
+        created_at: '2021-10-07T19:55:53.778Z',
       },
       {
         userId: 2,
@@ -34,7 +34,7 @@ export class UsersService {
         email: 'johndoe@gmail.com',
         type: 'Customer',
         payments: 'payments',
-        created_at: '2021-10-06',
+        created_at: '2021-10-07T19:55:53.778Z',
       },
       {
         userId: 3,
@@ -43,7 +43,7 @@ export class UsersService {
         email: 'johndoe@gmail.com',
         type: 'Customer',
         payments: 'payments',
-        created_at: '2021-10-06',
+        created_at: '2021-10-07T19:55:53.778Z',
       },
     ];
   }

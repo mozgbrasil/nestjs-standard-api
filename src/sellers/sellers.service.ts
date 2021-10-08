@@ -52,13 +52,13 @@ export class SellersService {
   }
 
   async findSellerWallet(id: string) {
-    const seller = await this.sellerMyModel.findOne({ _id: id });
-    return seller.wallet;
+    const results = await this.sellerMyModel.findOne({ sellerId: id });
+    return results;
   }
 
   async findSellerTransaction(id: string) {
-    const seller = await this.sellerMyModel.findOne({ _id: id });
-    return seller.wallet;
+    const results = await this.sellerMyModel.findOne({ _id: id });
+    return results;
   }
 
   async createWallet(sellerName: string) {

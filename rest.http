@@ -16,7 +16,7 @@ content-type: application/json
   "password": "changeme",
   "type": "Customer",
   "payments": "cielo",
-  "created_at": "2021-10-06",
+  "created_at": "2021-10-07T19:55:53.778Z",
 }
 
 ###
@@ -34,3 +34,13 @@ POST {{baseUrl}}/order/cielo_return HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
 PaymentId=bb482756-cf40-4b0a-b926-489f59236e94
+
+###
+
+GET https://apiquerysandbox.cieloecommerce.cielo.com.br/1/sales/54aa4bed-a25e-4fd3-a091-6b30d37476d7 HTTP/1.1
+Content-Type: application/json
+MerchantId: 860e574e-6bf4-4d8b-b18c-ca1e0389b73b
+MerchantKey: PJKEJUQHGCRQYHVYMRIYSCIPTKELIGFHOKFEUTUA
+RequestId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+###

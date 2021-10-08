@@ -8,14 +8,14 @@ export class CreateWalletDto {
     description: 'The id of a seller',
     default: '1',
   })
-  readonly id_seller: number;
+  readonly sellerId: number;
 
-  @IsString()
+  @IsNumber()
   @ApiProperty({
     description: 'The amount of a transaction',
     example: '100',
   })
-  readonly amount: string;
+  readonly amount: number;
 
   @IsString()
   @ApiProperty({

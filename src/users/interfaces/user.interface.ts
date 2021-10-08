@@ -4,6 +4,5 @@ export interface Seller extends Document {
   readonly email: string;
   readonly password: string;
   readonly type: string;
-  readonly payments: string;
   readonly created_at: string;
 }

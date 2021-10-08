@@ -24,6 +24,7 @@ import { SellerSchema } from './sellers/interfaces/seller.schema';
 import { SellersModule } from './sellers/sellers.module';
 import { PaymentsModule } from './payments/payments.module';
 import { WalletsModule } from './wallets/wallets.module';
+import { TransactionsModule } from './transactions/transactions.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -52,6 +53,7 @@ import { WalletsModule } from './wallets/wallets.module';
     SellersModule,
     PaymentsModule,
     WalletsModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [
