@@ -1,10 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Payment } from '../payments/entities/payment.entity';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 // class/interface representing a user entity
 export type LocalUser = any;
@@ -71,7 +70,7 @@ export class UsersService {
   async findCustomerById(id: any) {
     const result = await this.userMyModel.findOne({ _id: id });
 
-    var obj = result.toJSON();
+    const obj = result.toJSON();
 
     return obj;
   }

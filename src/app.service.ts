@@ -4,8 +4,8 @@ import { Injectable } from '@nestjs/common';
 export class AppService {
   // getHello(): string {
   getHello() {
-    var data = new Date();
-    var message = 'Hello World! ' + `(${data})`;
+    const data = new Date();
+    const message = 'Hello World! ' + `(${data})`;
     return { message: message };
   }
 }

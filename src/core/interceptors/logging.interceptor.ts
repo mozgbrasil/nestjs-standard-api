@@ -8,7 +8,6 @@ import {
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ClientProxy } from '@nestjs/microservices';
-import { Message } from '../../message.event';
 import RabbitmqServer from '../../common/rabbitmq-server';
 
 @Injectable()
@@ -24,8 +23,8 @@ export class LoggingInterceptor implements NestInterceptor {
     const req = ctx.getRequest();
     const res = ctx.getResponse();
 
-    var timestamp = new Date().getTime();
-    var message = {
+    const timestamp = new Date().getTime();
+    const message = {
       url: req.originalUrl,
       body: req.body,
       method: req.method,
@@ -33,7 +32,7 @@ export class LoggingInterceptor implements NestInterceptor {
       timestamp: timestamp,
     };
 
-    var payload = {
+    const payload = {
       pattern: 'create-rmq-channel',
       data: message,
     };

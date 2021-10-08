@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 const jsonSchema = {
-  sellerId: { type: Number, required: true },
+  sellerId: { type: String, required: true },
   amount: { type: Number, required: true },
   transaction: { type: String, required: true },
 };

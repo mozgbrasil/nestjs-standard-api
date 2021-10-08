@@ -1,4 +1,3 @@
-import { Payment } from '../../payments/entities/payment.entity';
 export class User {
   username: string;
 

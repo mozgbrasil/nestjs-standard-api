@@ -18,11 +18,11 @@ export class CreateTransactionDto {
   })
   readonly orderId: string;
 
-  @IsInt()
+  @IsString()
   @ApiProperty({
-    type: [Number],
+    type: [String],
     description: 'The walletId a transaction',
     default: '1',
   })
-  readonly walletId: number;
+  readonly walletId: string;
 }

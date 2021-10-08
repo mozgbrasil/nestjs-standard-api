@@ -4,7 +4,7 @@ import {
   MiddlewareConsumer,
   ValidationPipe,
 } from '@nestjs/common';
-import { APP_FILTER, APP_PIPE, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_PIPE, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -12,15 +12,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-
-import { HttpExceptionFilter } from './exceptions/http-exception.filter';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { UsersModule } from './users/users.module';
-import { CatsModule } from './cats/cats.module';
-import { SellerSchema } from './sellers/interfaces/seller.schema';
 import { SellersModule } from './sellers/sellers.module';
 import { PaymentsModule } from './payments/payments.module';
 import { WalletsModule } from './wallets/wallets.module';

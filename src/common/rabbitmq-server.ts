@@ -1,4 +1,4 @@
-import { Connection, Channel, connect, Message } from "amqplib";
+import { Connection, Channel, connect, Message } from 'amqplib';
 
 export default class RabbitmqServer {
   private conn: Connection;
@@ -18,7 +18,7 @@ export default class RabbitmqServer {
   async publishInExchange(
     exchange: string,
     routingKey: string,
-    message: string
+    message: string,
   ): Promise<boolean> {
     return this.channel.publish(exchange, routingKey, Buffer.from(message));
   }

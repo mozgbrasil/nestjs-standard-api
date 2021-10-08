@@ -1,22 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Inject,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Patch, Param, Inject } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ClientProxy } from '@nestjs/microservices';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { CustomerGuard } from 'src/users/guards/user.guard';
-import { DecodeJwt } from 'src/common/decorators/decode-jwt.decortator';
 
 @ApiTags('payments')
 @Controller('payments')

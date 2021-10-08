@@ -1,9 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateSellerDto } from './dto/create-seller.dto';
-import { UpdateSellerDto } from './dto/update-seller.dto';
 import { Seller } from './entities/seller.entity';
 import { Payment } from '../payments/entities/payment.entity';
 import { Wallet } from '../wallets/entities/wallet.entity';
@@ -46,7 +45,7 @@ export class SellersService {
   async findSellerById(id: string) {
     const result = await this.sellerMyModel.findOne({ _id: id });
 
-    var obj = result.toJSON();
+    const obj = result.toJSON();
 
     return obj;
   }
@@ -59,14 +58,5 @@ export class SellersService {
   async findSellerTransaction(id: string) {
     const results = await this.sellerMyModel.findOne({ _id: id });
     return results;
-  }
-
-  async createWallet(sellerName: string) {
-    const saved = await new this.walletMyModel(CreateWalletDto).save();
-
-    if (!saved) {
-      throw new RpcException('Problem to create a record');
-    }
-    return saved;
   }
 }

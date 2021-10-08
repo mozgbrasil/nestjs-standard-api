@@ -2,9 +2,7 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
   Post,
-  Render,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -17,11 +15,8 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
-  ApiHeader,
   ApiOperation,
 } from '@nestjs/swagger';
-import { Message } from './message.event';
-import { ClientProxy } from '@nestjs/microservices';
 import { CustomerGuard } from './users/guards/user.guard';
 
 @Controller()
@@ -38,9 +33,8 @@ export class AppController {
   @Get()
   getHello() {
     // var message = this.appService.getHello();
-    var data = new Date();
-    var message = 'Hello World! ' + `(${data})`;
-    // this.client.emit<any>('message_printed', new Message(message));
+    // const data = new Date();
+    // const message = 'Hello World! ' + `(${data})`;
     // this.client.emit<any>('create-rmq-channel', new Message(message));
     // return message;
     return this.appService.getHello();

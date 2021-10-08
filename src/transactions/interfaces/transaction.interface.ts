@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 export interface Transaction extends Document {
   readonly amount: number;
-  readonly orderId: String;
-  readonly walletId: number;
+  readonly orderId: string;
+  readonly walletId: string;
 }

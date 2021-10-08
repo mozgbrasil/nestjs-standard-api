@@ -1,12 +1,5 @@
-import {
-  HttpException,
-  Inject,
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
 import {
   CieloConstructor,
   Cielo,
@@ -16,24 +9,19 @@ import {
   ConsultTransactionMerchantOrderIdRequestModel,
   ConsultTransactionPaymentIdRequestModel,
 } from 'cielo';
-import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
 import { Payment } from './entities/payment.entity';
-import { DebitCard } from './entities/debit-card.entity';
-import { HttpLogDTO } from 'src/common/dtos/httplog.dto';
 import { Transaction } from './entities/transaction.entity';
 import { Wallet } from 'src/wallets/entities/wallet.entity';
 import * as uuid from 'uuid';
 import { Seller } from 'src/sellers/entities/seller.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateDebitCardDto } from './dto/create-debit-card.dto';
 import RabbitmqServer from '../common/rabbitmq-server';
 import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class PaymentsService {
-  constructor() {}
-
   @InjectModel('User') private readonly userMyModel: Model<User>;
   @InjectModel('Seller') private readonly sellerMyModel: Model<Seller>;
   @InjectModel('Payment') private readonly paymentMyModel: Model<Payment>;
@@ -54,7 +42,7 @@ export class PaymentsService {
       throw new NotFoundException('Seller Not Found!');
     }
 
-    let payment = new Payment();
+    const payment = new Payment();
     const orderId = uuid.v4();
     Object.assign(payment, {
       orderId,
@@ -69,7 +57,7 @@ export class PaymentsService {
     return await this.sendRequestCielo(payment);
   }
 
-  async sendRequestCielo(payment: Payment) {
+  myCielo() {
     const cieloParams: CieloConstructor = {
       merchantId: process.env.MERCHANTID,
       merchantKey: process.env.MERCHANTKEY,
@@ -79,6 +67,12 @@ export class PaymentsService {
     };
 
     const cielo = new Cielo(cieloParams);
+
+    return cielo;
+  }
+
+  async sendRequestCielo(payment: Payment) {
+    const cielo = this.myCielo();
 
     const debitCardTransactionParams: DebitCardSimpleTransactionRequestModel = {
       merchantOrderId: payment.orderId,
@@ -106,8 +100,8 @@ export class PaymentsService {
         // console.log('res: ', res);
 
         //
-        var timestamp = new Date().getTime();
-        var message = {
+        const timestamp = new Date().getTime();
+        const message = {
           url: 'req.originalUrl',
           body: res,
           method: 'POST',
@@ -115,7 +109,7 @@ export class PaymentsService {
           timestamp: timestamp,
         };
 
-        var payload = {
+        const payload = {
           pattern: 'create-rmq-channel',
           data: message,
         };
@@ -131,7 +125,7 @@ export class PaymentsService {
         return res;
       })
       .catch((err) => {
-        var message = err.response;
+        const message = err.response;
         console.error('err: ', message);
         return message;
       });
@@ -143,20 +137,7 @@ export class PaymentsService {
   }
 
   async validatePayment(id: string) {
-    const cieloParams: CieloConstructor = {
-      merchantId: process.env.MERCHANTID,
-      merchantKey: process.env.MERCHANTKEY,
-      requestId: 'xxxxxxx', // Opcional - Identificação do Servidor na Cielo
-      sandbox: true, // Opcional - Ambiente de Testes
-      debug: true, // Opcional - Exibe os dados enviados na requisição para a Cielo
-    };
-
-    const cielo = new Cielo(cieloParams);
-
-    const consultTransactionMerchantOrderI: ConsultTransactionMerchantOrderIdRequestModel =
-      {
-        merchantOrderId: id,
-      };
+    const cielo = this.myCielo();
 
     const consultTransactionPaymentId: ConsultTransactionPaymentIdRequestModel =
       {
@@ -164,7 +145,6 @@ export class PaymentsService {
       };
 
     const response: any = await cielo.consult
-      // .merchantOrderId(consultTransactionMerchantOrderI)
       .paymentId(consultTransactionPaymentId)
       .then((res) => {
         // console.log('res: ', res);
@@ -175,8 +155,8 @@ export class PaymentsService {
       });
 
     //
-    var timestamp = new Date().getTime();
-    var message = {
+    const timestamp = new Date().getTime();
+    const message = {
       url: 'req.originalUrl',
       body: response,
       method: 'POST',
@@ -184,7 +164,7 @@ export class PaymentsService {
       timestamp: timestamp,
     };
 
-    var payload = {
+    const payload = {
       pattern: 'create-rmq-channel',
       data: message,
     };
@@ -213,28 +193,26 @@ export class PaymentsService {
 
     // insert record wallet
 
-    // const sellerWallet = payment.seller.wallet;
-    // sellerWallet.amount += payment.amount;
-
-    var obj = payment.toJSON();
-
     const sellerWallet: any = {
-      sellerId: payment.amount,
+      sellerId: payment.seller,
       amount: payment.amount,
-      transaction: 123,
+      transaction: payment,
     };
 
-    await new this.walletMyModel(sellerWallet).save();
+    let wallet = await new this.walletMyModel(sellerWallet).save();
+
+    var obj = wallet.toJSON();
 
     // insert record transaction
 
-    await this.createTransaction(payment.amount, payment.orderId, sellerWallet);
+    var walletId: any = wallet._id;
+
+    await this.createTransaction(payment.amount, payment.orderId, walletId);
 
     return payment;
   }
 
   async refusePayment(id: string) {
-    console.log('@@@ refusePayment', id);
     let payment = await this.paymentMyModel.findOne({ orderId: id });
 
     payment.status = 'Refused';
@@ -244,20 +222,15 @@ export class PaymentsService {
     return payment;
   }
 
-  async createTransaction(amount: number, orderId: string, wallet: Wallet) {
-    console.log('@@@ createTransaction');
+  async createTransaction(amount: number, orderId: string, walletId: string) {
     const transaction = new Transaction();
 
-    const walletId = 'uuid.v4()';
+    const collection: any = {
+      amount: amount,
+      orderId: orderId,
+      walletId: walletId,
+    };
 
-    const id = uuid.v4();
-
-    Object.assign(transaction, {
-      amount,
-      orderId,
-      walletId,
-    });
-
-    await new this.transactionMyModel(transaction).save();
+    await new this.transactionMyModel(collection).save();
   }
 }

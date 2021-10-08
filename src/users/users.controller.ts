@@ -1,23 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CustomerGuard } from './guards/user.guard';
 import { DecodeJwt } from '../common/decorators/decode-jwt.decortator';
@@ -33,12 +17,12 @@ export class UsersController {
     private readonly paymentsService: PaymentsService,
   ) {}
 
-  @Post('mongo-create')
+  @Post('create')
   createMongoRecord(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createMongoRecord(createUserDto);
   }
 
-  @Get('mongo-list')
+  @Get('list')
   findAll() {
     return this.usersService.findMongoRecord();
   }

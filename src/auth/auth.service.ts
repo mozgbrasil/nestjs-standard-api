@@ -2,8 +2,6 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
 import { Seller } from '../sellers/entities/seller.entity';
@@ -17,28 +15,6 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
-
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
-
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
-
-  //
 
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
@@ -65,7 +41,7 @@ export class AuthService {
       throw new UnauthorizedException('Email or Password incorrect');
     }
 
-    var obj = result.toJSON();
+    const obj = result.toJSON();
 
     return obj;
   }
@@ -79,7 +55,7 @@ export class AuthService {
       throw new UnauthorizedException('Email or Password incorrect');
     }
 
-    var obj = result.toJSON();
+    const obj = result.toJSON();
 
     return obj;
   }

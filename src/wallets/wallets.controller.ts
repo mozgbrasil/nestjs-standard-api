@@ -1,15 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { WalletsService } from './wallets.service';
-import { CreateWalletDto } from './dto/create-wallet.dto';
-import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('wallets')
@@ -17,12 +7,12 @@ import { ApiTags } from '@nestjs/swagger';
 export class WalletsController {
   constructor(private readonly walletsService: WalletsService) {}
 
-  // @Post('mongo-create')
+  // @Post('create')
   // createMongoRecord(@Body() createWalletDto: CreateWalletDto) {
   //   return this.walletsService.createMongoRecord(createWalletDto);
   // }
 
-  @Get('mongo-list')
+  @Get('list')
   findAll() {
     return this.walletsService.findMongoRecord();
   }

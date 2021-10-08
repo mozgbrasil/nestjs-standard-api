@@ -1,7 +1,5 @@
-import { Transaction } from '../../payments/entities/transaction.entity';
-
 export class Wallet {
-  sellerId: number;
+  sellerId: string;
 
   amount: number;
 
