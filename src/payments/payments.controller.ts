@@ -1,4 +1,4 @@
-import { Controller, Patch, Param, Inject } from '@nestjs/common';
+import { Controller, Patch, Param, Inject, Post, Body } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { ApiTags } from '@nestjs/swagger';
 import { ClientProxy } from '@nestjs/microservices';
@@ -26,5 +26,10 @@ export class PaymentsController {
   @Patch('check/:id')
   async validatePayment(@Param('id') id: string) {
     return await this.paymentsService.validatePayment(id);
+  }
+
+  @Post('return')
+  async cieloPaymentReturn(@Body() body) {
+    return await this.paymentsService.cieloPaymentReturn(body);
   }
 }

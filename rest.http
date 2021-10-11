@@ -30,10 +30,10 @@ Authorization: Bearer {{access_token}}
 
 ###
 
-POST {{baseUrl}}/order/cielo_return HTTP/1.1
+POST {{baseUrl}}/payments/return HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
-PaymentId=bb482756-cf40-4b0a-b926-489f59236e94
+PaymentId=f5b3fa42-116d-4b25-b957-a297b4618f3b
 
 ###
 

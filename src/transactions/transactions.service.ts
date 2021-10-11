@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Transaction } from 'src/payments/entities/transaction.entity';
+import { Transaction } from '../payments/entities/transaction.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 
 @Injectable()

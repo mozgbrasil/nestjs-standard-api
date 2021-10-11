@@ -12,13 +12,13 @@ import {
 import { ClientProxy } from '@nestjs/microservices';
 import { Payment } from './entities/payment.entity';
 import { Transaction } from './entities/transaction.entity';
-import { Wallet } from 'src/wallets/entities/wallet.entity';
+import { Wallet } from '../wallets/entities/wallet.entity';
 import * as uuid from 'uuid';
-import { Seller } from 'src/sellers/entities/seller.entity';
+import { Seller } from '../sellers/entities/seller.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import RabbitmqServer from '../common/rabbitmq-server';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class PaymentsService {
@@ -178,9 +178,9 @@ export class PaymentsService {
     //
 
     const orderId = response.merchantOrderId;
-    // if (response.payment.status === 2) {
-    return await this.approvePayment(orderId);
-    // }
+    if (response.payment.status === 2) {
+      return await this.approvePayment(orderId);
+    }
     return await this.refusePayment(orderId);
   }
 
@@ -232,5 +232,13 @@ export class PaymentsService {
     };
 
     await new this.transactionMyModel(collection).save();
+  }
+
+  async cieloPaymentReturn(body) {
+    let paymentId = body.PaymentId;
+
+    let validatePayment = await this.validatePayment(paymentId);
+
+    return validatePayment;
   }
 }

@@ -5,11 +5,11 @@ import { AuthModule } from '../auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './interfaces/user.schema';
 import { PaymentSchema } from '../payments/interfaces/payment.schema';
-import { PaymentsService } from 'src/payments/payments.service';
-import { WalletSchema } from 'src/wallets/interfaces/wallet.schema';
-import { TransactionSchema } from 'src/transactions/interfaces/transaction.schema';
+import { PaymentsService } from '../payments/payments.service';
+import { WalletSchema } from '../wallets/interfaces/wallet.schema';
+import { TransactionSchema } from '../transactions/interfaces/transaction.schema';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { SellerSchema } from 'src/sellers/interfaces/seller.schema';
+import { SellerSchema } from '../sellers/interfaces/seller.schema';
 
 @Module({
   imports: [

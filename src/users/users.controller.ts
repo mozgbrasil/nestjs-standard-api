@@ -6,8 +6,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CustomerGuard } from './guards/user.guard';
 import { DecodeJwt } from '../common/decorators/decode-jwt.decortator';
 import { AuthenticatedUser } from '../common/dtos/authenticatedUser.dto';
-import { CreatePaymentDto } from 'src/payments/dto/create-payment.dto';
-import { PaymentsService } from 'src/payments/payments.service';
+import { CreatePaymentDto } from '../payments/dto/create-payment.dto';
+import { PaymentsService } from '../payments/payments.service';
 
 @ApiTags('users')
 @Controller('users')
