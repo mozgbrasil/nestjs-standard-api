@@ -3,16 +3,10 @@ import { Seller } from '../../sellers/entities/seller.entity';
 import { DebitCard } from './debit-card.entity';
 export class Payment {
   orderId: string;
-
   amount: number;
-
   status: string;
-
-  customer: User;
-
-  seller: Seller;
-
+  customerId: string;
+  sellerId: string;
   debitCard: DebitCard;
-
   created_at: Date;
 }

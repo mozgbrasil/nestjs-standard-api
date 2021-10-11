@@ -15,7 +15,7 @@ export class CreateDebitCardDto {
 
   @ApiProperty({
     description: 'Numero',
-    example: '4929465240388137',
+    example: '4012001037141112',
   })
   cardNumber: string;
 

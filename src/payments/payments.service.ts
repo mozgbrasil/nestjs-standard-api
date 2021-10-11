@@ -42,16 +42,15 @@ export class PaymentsService {
       throw new NotFoundException('Seller Not Found!');
     }
 
-    const payment = new Payment();
     const orderId = uuid.v4();
+    const payment = new Payment();
     Object.assign(payment, {
       orderId,
       amount,
       status: 'n/a',
-      seller: sellerId,
-      customer: customerId,
+      sellerId: sellerId,
+      customerId: customerId,
       debitCard,
-      created_at: new Date().toISOString(),
     });
 
     return await this.sendRequestCielo(payment);
@@ -130,8 +129,13 @@ export class PaymentsService {
         return message;
       });
 
-    // payment = await this.paymentMyModel.save(payment); // pg
-    payment = await new this.paymentMyModel(payment).save(); // mg
+    Object.assign(payment, {
+      transaction: transaction,
+      created_at: new Date().toISOString(),
+    });
+
+    // await this.paymentMyModel.save(payment); // pg
+    await new this.paymentMyModel(payment).save(); // mg
 
     return transaction;
   }
@@ -178,9 +182,9 @@ export class PaymentsService {
     //
 
     const orderId = response.merchantOrderId;
-    if (response.payment.status === 2) {
-      return await this.approvePayment(orderId);
-    }
+    // if (response.payment.status === 2) {
+    return await this.approvePayment(orderId);
+    // }
     return await this.refusePayment(orderId);
   }
 
@@ -191,21 +195,32 @@ export class PaymentsService {
 
     payment = await new this.paymentMyModel(payment).save();
 
-    // insert record wallet
+    // add amount to wallet
 
-    const sellerWallet: any = {
-      sellerId: payment.seller,
-      amount: payment.amount,
-      transaction: payment,
+    let wallet = await this.walletMyModel.findOne({
+      sellerId: payment.sellerId,
+    });
+
+    let sumAmount = +wallet.amount + +payment.amount;
+
+    let filter = { sellerId: payment.sellerId };
+    let update = {
+      sellerId: payment.sellerId,
+      amount: sumAmount,
+    };
+    let options = {
+      new: true,
     };
 
-    let wallet = await new this.walletMyModel(sellerWallet).save();
-
-    var obj = wallet.toJSON();
+    const walletModel = await this.walletMyModel.findOneAndUpdate(
+      filter,
+      update,
+      options,
+    );
 
     // insert record transaction
 
-    var walletId: any = wallet._id;
+    var walletId: any = walletModel._id;
 
     await this.createTransaction(payment.amount, payment.orderId, walletId);
 
@@ -223,7 +238,13 @@ export class PaymentsService {
   }
 
   async createTransaction(amount: number, orderId: string, walletId: string) {
-    const transaction = new Transaction();
+    let getTransaction = await this.transactionMyModel.findOne({
+      orderId: orderId,
+    });
+
+    if (getTransaction) {
+      return getTransaction;
+    }
 
     const collection: any = {
       amount: amount,
@@ -231,14 +252,10 @@ export class PaymentsService {
       walletId: walletId,
     };
 
-    await new this.transactionMyModel(collection).save();
-  }
+    let setTransaction = await new this.transactionMyModel(collection).save();
 
-  async cieloPaymentReturn(body) {
-    let paymentId = body.PaymentId;
+    let items = setTransaction.toJSON();
 
-    let validatePayment = await this.validatePayment(paymentId);
-
-    return validatePayment;
+    return setTransaction;
   }
 }

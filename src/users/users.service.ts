@@ -70,9 +70,9 @@ export class UsersService {
   async findCustomerById(id: any) {
     const result = await this.userMyModel.findOne({ _id: id });
 
-    const obj = result.toJSON();
+    const items = result.toJSON();
 
-    return obj;
+    return items;
   }
 
   async findCustomerPayments(id: any) {

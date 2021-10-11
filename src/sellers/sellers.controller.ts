@@ -13,13 +13,13 @@ export class SellersController {
   constructor(private readonly sellersService: SellersService) {}
 
   @Post('create')
-  createMongoRecord(@Body() createSellerDto: CreateSellerDto) {
-    return this.sellersService.createMongoRecord(createSellerDto);
+  createSeller(@Body() createSellerDto: CreateSellerDto) {
+    return this.sellersService.createSeller(createSellerDto);
   }
 
   @Get('list')
   findAll() {
-    return this.sellersService.findMongoRecord();
+    return this.sellersService.findSellers();
   }
 
   @UseGuards(JwtAuthGuard, SellerGuard)

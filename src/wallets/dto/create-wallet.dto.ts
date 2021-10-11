@@ -13,16 +13,8 @@ export class CreateWalletDto {
   @IsNumber()
   @ApiProperty({
     type: [Number],
-    description: 'The amount of a transaction',
+    description: 'The amount of a wallet of user',
     example: '100',
   })
   readonly amount: number;
-
-  @IsString()
-  @ApiProperty({
-    type: [String],
-    description: 'The transaction',
-    default: 'x1s452s',
-  })
-  readonly transaction: string;
 }

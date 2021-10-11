@@ -126,12 +126,12 @@ de pagamento da cielo.
 
 2 – Cada pagamento capturado (finalizado) deverá ter seu valor adicionado à carteira do vendedor.
 
-ℹ️ @TODO: Devo implementar tratamento na Url de retorno, processo para consulta do parâmetro "PaymentId", onde caso o retorno tenha o status como 2 equivale que a transação deve ser autorizada "paga"
+👕️ Feito
 
 3 – Cada valor que for adicionado à carteira do vendedor, deverá gerar um registro de transação,
 contendo o valor adicionado e o pagamento de origem.
 
-ℹ️ @TODO:
+👕️ Feito
 
 4 – TODAS AS REQUISIÇÕES feitas para a API e ENVIADAS pela API, deverão ser LOGADAS.
 Para isso, crie um modulo na api para fazer envio de dados para uma fila no RabbitMQ. Os dados
@@ -189,14 +189,14 @@ Ex: A função cieloDebitCard() deveria estar sendo exportada de outro arquivo e
 
 > > refatorar as classes de serviço para não implementarem funções, substitua por métodos e utilize o construtor da classe sempre que achar necessário incializar alguma propriedade ou fluxo da classe em sua inicialização.
 
-ℹ️ @TODO:
+👕️ Feito
 
 4. Métodos não implementados.
 
 podemos ver que os métodos principais ainda não estão implementados, estão retornando apenas uma string pura diretamente (vide o item 1).
 A função cieloDebitCard(), com as devidas considerações do item 3, parece ok, mas tente deixa-la mais dinamica, passando como argumento o ID do pagamento/pedido e referenciando esse id no campo merchantOrderId, para que assim possamos ter uma rastreabilidade melhor dos pagamentos na cielo.
 
-ℹ️ @TODO:
+👕️ Feito
 
 5. DTOs não documentados
 
@@ -286,7 +286,7 @@ INSTRUÇÕES
 
 - implemente o envio do log da requisição da cielo para a fila
 
-ℹ️ @TODO:
+👕️ Feito
 
 ### Passos Test Swagger
 
@@ -297,7 +297,6 @@ INSTRUÇÕES
 - User Payment
   |-- > authenticationUrl
 - Check Payment
--
 
 ## Contribuição
 

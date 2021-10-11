@@ -41,9 +41,9 @@ export class AuthService {
       throw new UnauthorizedException('Email or Password incorrect');
     }
 
-    const obj = result.toJSON();
+    const items = result.toJSON();
 
-    return obj;
+    return items;
   }
 
   async validateSeller(email: string, password: string): Promise<any> {
@@ -55,8 +55,8 @@ export class AuthService {
       throw new UnauthorizedException('Email or Password incorrect');
     }
 
-    const obj = result.toJSON();
+    const items = result.toJSON();
 
-    return obj;
+    return items;
   }
 }

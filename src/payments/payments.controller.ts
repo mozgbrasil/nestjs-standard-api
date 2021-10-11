@@ -1,7 +1,17 @@
-import { Controller, Patch, Param, Inject, Post, Body } from '@nestjs/common';
-import { PaymentsService } from './payments.service';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Patch,
+  Param,
+  Inject,
+  Post,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ClientProxy } from '@nestjs/microservices';
+import { PaymentsService } from './payments.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CustomerGuard } from '../users/guards/user.guard';
 
 @ApiTags('payments')
 @Controller('payments')
@@ -22,14 +32,10 @@ export class PaymentsController {
   //   return await this.paymentsService.createPayment(createPaymentDto, auth._id);
   // }
 
-  // @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, CustomerGuard)
+  @ApiBearerAuth('JWT-auth')
   @Patch('check/:id')
   async validatePayment(@Param('id') id: string) {
     return await this.paymentsService.validatePayment(id);
-  }
-
-  @Post('return')
-  async cieloPaymentReturn(@Body() body) {
-    return await this.paymentsService.cieloPaymentReturn(body);
   }
 }

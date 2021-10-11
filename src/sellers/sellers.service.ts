@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -16,16 +16,27 @@ export class SellersService {
     @InjectModel('Payment') private readonly paymentMyModel: Model<Payment>,
   ) {}
 
-  async createMongoRecord(createSellerDto: CreateSellerDto): Promise<Seller> {
-    const result = await new this.sellerMyModel(createSellerDto).save();
+  async createSeller(createSellerDto: CreateSellerDto): Promise<Seller> {
+    const userAlreadyExists = await this.sellerMyModel.findOne({
+      where: { email: createSellerDto.email },
+    });
 
-    if (!result) {
-      throw new RpcException('Problem to create a record');
+    if (userAlreadyExists) {
+      throw new ConflictException('This email is already in use');
     }
-    return result;
+
+    const seller = await new this.sellerMyModel(createSellerDto).save();
+
+    if (!seller) {
+      throw new RpcException('Problem to create a seller record');
+    }
+
+    const wallet = await this.createWallet(seller._id);
+
+    return seller;
   }
 
-  async findMongoRecord() {
+  async findSellers() {
     const results = await this.sellerMyModel.find({});
     if (!results) {
       throw new RpcException('Problem to list a record');
@@ -45,14 +56,25 @@ export class SellersService {
   async findSellerById(id: string) {
     const result = await this.sellerMyModel.findOne({ _id: id });
 
-    const obj = result.toJSON();
+    const items = result.toJSON();
 
-    return obj;
+    return items;
   }
 
   async findSellerWallet(id: string) {
     const results = await this.sellerMyModel.findOne({ sellerId: id });
     return results;
+  }
+
+  async createWallet(id: string) {
+    const wallet = new Wallet();
+
+    Object.assign(wallet, {
+      sellerId: id,
+      amount: 0,
+    });
+
+    return await new this.walletMyModel(wallet).save();
   }
 
   async findSellerTransaction(id: string) {

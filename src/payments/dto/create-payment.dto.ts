@@ -16,7 +16,7 @@ export class CreatePaymentDto {
 
   @ApiProperty({
     description: 'Seller ID',
-    example: '616082f95fc80d8d555b1d48',
+    example: '61647fcfe35f00df5d6cf7e3',
   })
   sellerId: string;
 
@@ -25,8 +25,8 @@ export class CreatePaymentDto {
     example: {
       holder: 'John Doe',
       brand: 'Visa',
-      cardNumber: '4929465240388137',
-      expirationDate: '06/2023',
+      cardNumber: '4012001037141112',
+      expirationDate: '12/2021',
       securityCode: '123',
     },
   })
