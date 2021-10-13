@@ -5,6 +5,6 @@ export interface Wallet extends Document {
   readonly sellerId: string;
   readonly amount: number;
   readonly status: string;
-  readonly transaction: object;
+  readonly transaction: object; // @TODO: 2 object, string because error eslint
   readonly created_at: string;
 }

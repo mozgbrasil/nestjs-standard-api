@@ -82,7 +82,6 @@ services:
     image: 'dpage/pgadmin4'
     network_mode: 'host'
     restart: unless-stopped
-    # @TODO: Error, Not Work
     ports:
       - '15432:15432'
     environment:
@@ -98,6 +97,7 @@ services:
       - '6379:6379'
   redisinsight:
     image: redislabs/redisinsight
+    network_mode: 'host'
     restart: unless-stopped
     links:
       - redis:redis
@@ -107,9 +107,7 @@ services:
       - redis-data:/db
   rabbitmq:
     image: 'rabbitmq:3.8-management-alpine'
-    # network_mode: "host"
-    # container_name: nodejs-rabbitmq-rabbitmq
-    # hostname: rabbitmq
+    network_mode: 'host'
     ports:
       - '15672:15672'
       - '5672:5672'

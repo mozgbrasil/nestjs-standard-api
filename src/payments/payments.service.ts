@@ -6,7 +6,6 @@ import {
   EnumCardType,
   DebitCardSimpleTransactionRequestModel,
   EnumBrands,
-  ConsultTransactionMerchantOrderIdRequestModel,
   ConsultTransactionPaymentIdRequestModel,
 } from 'cielo';
 import { ClientProxy } from '@nestjs/microservices';
@@ -197,18 +196,18 @@ export class PaymentsService {
 
     // add amount to wallet
 
-    let wallet = await this.walletMyModel.findOne({
+    const wallet = await this.walletMyModel.findOne({
       sellerId: payment.sellerId,
     });
 
-    let sumAmount = +wallet.amount + +payment.amount;
+    const sumAmount = +wallet.amount + +payment.amount;
 
-    let filter = { sellerId: payment.sellerId };
-    let update = {
+    const filter = { sellerId: payment.sellerId };
+    const update = {
       sellerId: payment.sellerId,
       amount: sumAmount,
     };
-    let options = {
+    const options = {
       new: true,
     };
 
@@ -220,7 +219,7 @@ export class PaymentsService {
 
     // insert record transaction
 
-    var walletId: any = walletModel._id;
+    const walletId: any = walletModel._id;
 
     await this.createTransaction(payment.amount, payment.orderId, walletId);
 
@@ -238,7 +237,7 @@ export class PaymentsService {
   }
 
   async createTransaction(amount: number, orderId: string, walletId: string) {
-    let getTransaction = await this.transactionMyModel.findOne({
+    const getTransaction = await this.transactionMyModel.findOne({
       orderId: orderId,
     });
 
@@ -252,9 +251,9 @@ export class PaymentsService {
       walletId: walletId,
     };
 
-    let setTransaction = await new this.transactionMyModel(collection).save();
+    const setTransaction = await new this.transactionMyModel(collection).save();
 
-    let items = setTransaction.toJSON();
+    const items = setTransaction.toJSON();
 
     return setTransaction;
   }

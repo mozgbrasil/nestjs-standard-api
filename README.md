@@ -212,6 +212,10 @@ O guard que envia as requisições ao rabbitmq está instanciando uma nova conex
 
 ℹ️ @TODO:
 
+Baseado em
+
+https://stackoverflow.com/questions/66476115/rabbitmq-in-nestjs-error-on-both-producer-and-consumer
+
 7. Requisição à cielo não está sendo enviada para a fila de logs do rabbitmq.
 
 Na função de envio do pagamento à cielo, não vi nenhum ponto do código que envia o log dessa requisição à fila dos logs.
@@ -278,7 +282,7 @@ INSTRUÇÕES
 
 - implemente os casos de uso do teste, considerando a autenticação
 
-ℹ️ @TODO:
+👕️ feito via swagger
 
 - proceda com os ajustes citados na conexão do rabbit na api
 

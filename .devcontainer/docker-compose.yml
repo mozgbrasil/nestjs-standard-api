@@ -28,7 +28,7 @@ services:
     # Uncomment the next line to use a non-root user for all processes.
     # user: node
   mongodb:
-    image: mongo:latest
+    image: mongo
     network_mode: "host"
     restart: unless-stopped
     ports:
@@ -42,7 +42,7 @@ services:
     #  MONGO_INITDB_DATABASE: your-database-here
   mongo-express:
     image: mongo-express
-    network_mode: 'host'
+    network_mode: "host"
     restart: unless-stopped
     ports:
       - 8081:8081
@@ -51,7 +51,7 @@ services:
     environment:
       ME_CONFIG_MONGODB_URL: ${ME_CONFIG_MONGODB_URL:-mongodb://localhost:27017/mjv?ssl=false}
   postgres:
-    image: "postgres:9.6"
+    image: postgres
     network_mode: "host"
     restart: unless-stopped
     ports:
@@ -72,7 +72,6 @@ services:
     image: "dpage/pgadmin4"
     network_mode: "host"
     restart: unless-stopped
-    # @TODO: Error, Not Work
     ports:
       - "15432:15432"
     environment:
@@ -88,18 +87,15 @@ services:
       - "6379:6379"
   redisinsight:
     image: redislabs/redisinsight
+    network_mode: "host"
     restart: unless-stopped
-    links:
-      - redis:redis
     ports:
       - "8001:8001"
     volumes:
       - redis-data:/db
   rabbitmq:
-    image: "rabbitmq:3.8-management-alpine"
-    # network_mode: "host"
-    # container_name: nodejs-rabbitmq-rabbitmq
-    # hostname: rabbitmq
+    image: rabbitmq
+    network_mode: "host"
     ports:
       - "15672:15672"
       - "5672:5672"

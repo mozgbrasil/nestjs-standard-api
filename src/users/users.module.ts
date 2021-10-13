@@ -29,9 +29,9 @@ import { SellerSchema } from '../sellers/interfaces/seller.schema';
         options: {
           urls: [process.env.AMQP_URL],
           queue: process.env.AMQP_QUEUE,
-          // queueOptions: {
-          //   durable: false,
-          // },
+          queueOptions: {
+            durable: false,
+          },
         },
       },
     ]),

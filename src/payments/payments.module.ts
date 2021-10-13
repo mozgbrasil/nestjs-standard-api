@@ -25,9 +25,9 @@ import { TransactionSchema } from '../transactions/interfaces/transaction.schema
         options: {
           urls: [process.env.AMQP_URL],
           queue: process.env.AMQP_QUEUE,
-          // queueOptions: {
-          //   durable: false,
-          // },
+          queueOptions: {
+            durable: false,
+          },
         },
       },
     ]),

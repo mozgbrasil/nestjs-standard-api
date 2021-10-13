@@ -16,10 +16,12 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
 import { RolesGuard } from './common/guards/roles.guard';
 import { UsersModule } from './users/users.module';
+import { CatsModule } from './cats/cats.module';
 import { SellersModule } from './sellers/sellers.module';
 import { PaymentsModule } from './payments/payments.module';
 import { WalletsModule } from './wallets/wallets.module';
 import { TransactionsModule } from './transactions/transactions.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -37,14 +39,14 @@ import { TransactionsModule } from './transactions/transactions.module';
         options: {
           urls: [process.env.AMQP_URL],
           queue: process.env.AMQP_QUEUE,
-          // queueOptions: {
-          //   durable: false,
-          // },
+          queueOptions: {
+            durable: false,
+          },
         },
       },
     ]),
     UsersModule,
-    // CatsModule,
+    CatsModule,
     SellersModule,
     PaymentsModule,
     WalletsModule,
