@@ -46,11 +46,11 @@ import { TransactionsModule } from './transactions/transactions.module';
       },
     ]),
     UsersModule,
-    CatsModule,
     SellersModule,
     PaymentsModule,
     WalletsModule,
     TransactionsModule,
+    CatsModule,
   ],
   controllers: [AppController],
   providers: [
