@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CatsController } from './cats.controller';
-import { DatabaseModule } from 'src/common/providers/database/database.module';
+// import { DatabaseMongooseModule } from 'src/common/providers/database-mongoose/database.module';
 import { catsProviders } from './cats.providers';
+import { DatabaseTypeOrmModule } from 'src/common/providers/database-typeorm/database.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [
+    // DatabaseMongooseModule,
+    DatabaseTypeOrmModule,
+  ],
   controllers: [CatsController],
   providers: [CatsService, ...catsProviders],
 })
