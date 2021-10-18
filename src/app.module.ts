@@ -21,6 +21,7 @@ import { SellersModule } from './sellers/sellers.module';
 import { PaymentsModule } from './payments/payments.module';
 import { WalletsModule } from './wallets/wallets.module';
 import { TransactionsModule } from './transactions/transactions.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -51,6 +52,16 @@ import { TransactionsModule } from './transactions/transactions.module';
     WalletsModule,
     TransactionsModule,
     CatsModule,
+    // TypeOrmModule.forRoot({
+    //   type: 'mysql',
+    //   host: '127.0.0.1',
+    //   port: 3306,
+    //   username: 'db_user',
+    //   password: 'db_pass',
+    //   database: 'db_mjv',
+    //   synchronize: true,
+    //   entities: [__dirname + '/**/*.entity.{ts,js}'],
+    // }),
   ],
   controllers: [AppController],
   providers: [

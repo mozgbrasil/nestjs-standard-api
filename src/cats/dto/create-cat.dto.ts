@@ -1,14 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsString } from 'class-validator';
-
 export class CreateCatDto {
+  @IsString()
+  @ApiProperty({
+    description: 'The id of a cat',
+    minimum: 1,
+    default: 1,
+  })
+  readonly id?: string;
+
   @IsString()
   @ApiProperty({
     type: [String],
     description: 'The name of a cat',
     default: 'Ivanov',
   })
-  readonly name: string;
+  readonly name?: string;
 
   @IsInt()
   @ApiProperty({
@@ -16,7 +23,7 @@ export class CreateCatDto {
     minimum: 1,
     default: 1,
   })
-  readonly age: number;
+  readonly age?: number;
 
   @IsString()
   @ApiProperty({
@@ -24,5 +31,5 @@ export class CreateCatDto {
     description: 'The breed of a cat',
     default: 'Maine Coon',
   })
-  readonly breed: string;
+  readonly breed?: string;
 }

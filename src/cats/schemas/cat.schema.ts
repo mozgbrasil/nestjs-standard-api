@@ -1,7 +1,9 @@
 import * as mongoose from 'mongoose';
 
-export const CatSchema = new mongoose.Schema({
-  name: String,
-  age: Number,
-  breed: String,
-});
+const jsonSchema = {
+  name: { type: String, required: false },
+  age: { type: String, required: false },
+  breed: { type: String, required: false },
+};
+
+export const CatSchema = new mongoose.Schema(jsonSchema);
