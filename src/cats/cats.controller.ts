@@ -1,23 +1,50 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
-import { CatsService } from './cats.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
-import { Cat } from './interfaces/cat.interface';
-import { RolesGuard } from '../common/guards/roles.guard';
+import { Cat } from './entities/cat.entity';
+import { CatsService } from './cats.service';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('cats')
-@Controller('cats')
-@UseGuards(RolesGuard)
+@Controller('cat')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
-  @Post()
-  async create(@Body() createCatDto: CreateCatDto) {
-    return this.catsService.create(createCatDto);
+  @Get()
+  async getCats(): Promise<Cat[]> {
+    return this.catsService.getAll();
   }
 
-  @Get()
-  async findAll(): Promise<Cat[]> {
-    return this.catsService.findAll();
+  @Get('/name')
+  async getByName(@Query('name') name: string): Promise<Cat> {
+    return this.catsService.getOneByName(name);
+  }
+
+  @Get('/:id')
+  async getById(@Param('id') id: string): Promise<Cat> {
+    return this.catsService.getOne(id);
+  }
+
+  @Post('/new')
+  async newCat(@Body() cat: CreateCatDto): Promise<Cat> {
+    return this.catsService.insertOne(cat);
+  }
+
+  @Patch('/update')
+  async updateCat(@Body() cat: CreateCatDto): Promise<Cat> {
+    return this.catsService.updateOne(cat);
+  }
+
+  @Delete('/delete/:id')
+  async deleteCat(@Param('id') id: string): Promise<{ deleted: boolean }> {
+    return this.catsService.deleteOne(id);
   }
 }

@@ -8,7 +8,7 @@ import { Cat } from './entities/cat.entity';
 
 @Module({
   imports: [
-    // MongooseModule.forFeature([{ name: 'Cat', schema: CatSchema }]),
+    MongooseModule.forFeature([{ name: 'Cat', schema: CatSchema }]),
     TypeOrmModule.forFeature([Cat]),
   ],
   controllers: [CatsController],
