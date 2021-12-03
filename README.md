@@ -2,9 +2,7 @@
 
 ![valid XHTML][checkmark]'''
 
-# nestjs-standard-api
-
-0110-191556
+# nestjs-standard-api 👉️
 
 - https://nestjs.com/
 
